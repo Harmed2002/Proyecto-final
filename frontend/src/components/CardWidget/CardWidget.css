@@ -1,0 +1,10 @@
+.wd {
+    display: flex;
+    align-items: center;
+    width: 40px;
+}
+
+p {
+    color: white;
+    font-size: small;
+}

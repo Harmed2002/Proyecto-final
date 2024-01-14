@@ -1,0 +1,56 @@
+.containerShop {
+	text-align: center;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+}
+
+.detailsContainer {
+	background-color: white;
+	width: 60%;
+	height: 500px;
+	margin: 20px;
+}
+
+.detailsContainer h2 {
+	color: black;
+}
+
+.FormContainer {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	margin: 20px;
+	background-color: rgb(255, 255, 255);
+	width: 40%;
+	height: 500px;
+}
+
+.FormContainer h2 {
+	color: black;
+}
+
+/* .Textfield {
+	width: 40px;
+	background-color: red;
+} */
+
+.btnASendAction {
+	background: red;
+	color: white;
+	height: 54px;
+	width: 500px;
+	border-radius: 8px;
+	font-size: 18px;
+	transition: background, color 0.5s;
+	outline: #ff0000;
+	border: none;
+	margin: 10px;
+}
+
+.btnASendAction:hover {
+	/* color:black ; */
+	background: rgb(218, 54, 54);
+}
+

@@ -67,13 +67,6 @@ const Products = () => {
     }
 
 
-
-
-
-
-
-
-
     return (
         <div>
             <div id="showProducts" className="on">

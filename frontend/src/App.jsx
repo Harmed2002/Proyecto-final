@@ -4,8 +4,9 @@ import './App.css'
 // Components
 import Register from './components/register/Register';
 import Login from './components/login/Login';
+import Logout from "./components/logout/Logout";
 // import Header from './components/Header/Header';
-import NavBar from './components/NavBar/NavBar';
+// import NavBar from './components/NavBar/NavBar';
 
 import Checkout from './components/checkout/Checkout';
 // import Products from './components/products/Products';
@@ -23,23 +24,23 @@ import HomePage from "./pages/HomePage/HomePage";
 
 const App = () => {
 
-  return (
-    <>
-      <BrowserRouter>
-        <NavBar />
-        <Routes>
-          <Route path='/login' element={<Login />} />
-          <Route path='/' element={<Login />} />
-          <Route path='/register' element={<Register />} />
-          {/* <Route path='/products' element={<Products />} /> */}
-          <Route path='/products' element={<HomePage />} />
-          <Route path='/new-products' element={<NewProducts />} />
-          <Route path='/checkout/:cartId' element={<Checkout />} />
-        </Routes>
-      </BrowserRouter>
-
-    </>
-  )
+	return (
+		<SalesProvider>
+			<BrowserRouter>
+				{/* <NavBar /> */}
+				<Routes>
+					<Route path='/login' element={<Login />} />
+					<Route path='/' element={<Login />} />
+					<Route path='/register' element={<Register />} />
+					{/* <Route path='/products' element={<Products />} /> */}
+					<Route path='/products' element={<HomePage />} />
+					<Route path='/new-products' element={<NewProducts />} />
+					<Route path='/checkout/:cartId' element={<Checkout />} />
+					<Route path='/logout' element={<Logout />} />
+				</Routes>
+			</BrowserRouter>
+		</SalesProvider>
+	)
 }
 
 export default App

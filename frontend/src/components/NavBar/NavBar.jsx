@@ -1,29 +1,54 @@
 import { useState, useEffect } from 'react';
 import CardWidget from "../CardWidget/CardWidget";
-import { Link } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
+import { getCookiesByName } from '../../utils/formsUtils';
 import './NavBar.css';
 
 const NavBar = () => {
-	const [prods, setProds] = useState([]);
+	const [products, setProducts] = useState([]);
 	const categories = [];
+	const [isLoading, setIsLoading] = useState(false);
+    const navigate = useNavigate();
 
 	// Obtengo los productos
 	useEffect(() => {
 		const getProds = async () => {
-			const q = query(collection(db, "products"));
-			const querySnapshot = await getDocs(q);
-			const products = [];
+			setIsLoading(true);
+			try {
+                const token = getCookiesByName('jwtCookie');
+				// Obtengo todos los productos
+                const response = await fetch('http://localhost:4000/api/products', {
+                    method: 'GET',
+                    credentials: 'include',
+                    headers: {
+                        'Authorization': `${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                })
 
-			querySnapshot.forEach((doc) => {
-				products.push({ ...doc.data() });
-			});
-			setProds(products);	// Pasamos a Products todo lo que trae docs de Firestore
+                if (response.status == 200) {
+                    const data = await response.json();
+                    setProducts(data.docs);
+
+                } else if (response.status === 401) {
+                    const datos = await response.json()
+                    console.error('Error al acceder a productos, debes iniciar session', datos);
+					navigate('/')
+
+                } else {
+                    const data = await response.json();
+                    console.log("Error", data)
+                }
+
+            } catch (error) {
+                console.log('Error al intentar acceder a esta url.s', error);
+            }
 		};
 		getProds();
 	}, []);
 
 	// Obtengo solo las categorías
-	prods.map((element, index) => {
+	products.map((element, index) => {
 		categories.push(element.category);
 	})
 
@@ -31,7 +56,7 @@ const NavBar = () => {
 	let cats = categories.filter((item, index) => {
 		return categories.indexOf(item) === index;
 	});
-	
+
 	return (
 		<nav className="NavBar">
 			<ul>
@@ -50,6 +75,7 @@ const NavBar = () => {
 				</li>
 				<Link to="/contact">Contact</Link>
 				<Link to="/shop"><CardWidget /></Link>
+				<Link to="/logout">Logout</Link>
 			</ul>
 		</nav>
 	);

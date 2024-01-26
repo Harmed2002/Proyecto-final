@@ -40,7 +40,8 @@ const Login = () => {
 
 		if (response.status == 200) {
 			const datos = await response.json();
-			document.cookie = `jwtCookie=${datos.token}; expires=${new Date(Date.now() + 1 * 24 * 60 * 60 * 1000).toUTCString()}; path=/;`;
+			// Creo el token
+			document.cookie = `jwtCookie=${datos.token}; SameSite=None; expires=${new Date(Date.now() + 1 * 24 * 60 * 60 * 1000).toUTCString()}; path=/;`;
 			navigate('/products')
 		
 		} else if (response.status === 401) {
@@ -67,7 +68,7 @@ const Login = () => {
 					}}
 				>
 					<Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}><LockOutlinedIcon /></Avatar>
-					<Typography component="h1" variant="h5">Sign in</Typography>
+					<Typography component="h1" variant="h5">Sign In</Typography>
 					<Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }} ref={formRef} >
 						<TextField margin="normal" required fullWidth id="email" label="Email Address" name="email" autoComplete="email" autoFocus />
 						<TextField margin="normal" required fullWidth name="password" label="Password" type="password" id="password" autoComplete="current-password" />

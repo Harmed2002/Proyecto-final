@@ -55,9 +55,13 @@ export const current = async (req, res) => {
 export const logout = async (req, res) => {
     try {
         //si manejo sesiones en base de datos va esto
-        // if (req.session.user) {
+        if (req.session.user) {
+            console.log('session', req.session.user);
         //     req.session.destroy();
-        // } sino, va esto:
+        } else {
+            console.log("En local");
+        }
+        // sino, va esto:
         // res.clearCookie('jwtCookie');
         // window.localStorage.removeItem('jwtCookie');
         res.status(200).send({ resultado: 'usuario deslogueado' })

@@ -12,10 +12,11 @@ export const getProducts = async (req, res) => {
         if (products) {
             res.status(200).send(products);
         } else {
-            res.status(404).send({ error: 'productos no encontrados' });
+            res.status(404).send({ error: 'No existen productos en la BD' });
         }
+
     } catch (error) {
-        res.status(500).send({ error: `error en consultar productos ${error}` });
+        res.status(500).send({ error: `error al consultar productos: ${error}` });
     }
 }
 
@@ -55,8 +56,6 @@ export const postProduct = async (req, res) => {
     }
 
 }
-
-
 
 export const putProduct = async (req, res) => {
     const { id } = req.params;

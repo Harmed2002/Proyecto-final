@@ -19,6 +19,7 @@ const ListProduct = () => {
 			setIsLoading(true);
 			try {
                 const token = getCookiesByName('jwtCookie');
+				// Obtengo todos los productos
                 const response = await fetch('http://localhost:4000/api/products', {
                     method: 'GET',
                     credentials: 'include',
@@ -45,14 +46,7 @@ const ListProduct = () => {
             } catch (error) {
                 console.log('Error al intentar acceder a esta url.s', error);
             }
-			// const q = query(collection(db, "products"));
-			// const querySnapshot = await getDocs(q);
-			// const docs = [];
 
-			// querySnapshot.forEach((doc) => {
-			// 	docs.push({ ...doc.data(), id: doc.id });	// Unimos en un solo array la data y el id que vienen separados de Firestore
-			// });
-			// setProducts(docs);	// Pasamos a Products todo lo que trae docs de Firestore
 			setIsLoading(false);
 		};
 
@@ -60,7 +54,7 @@ const ListProduct = () => {
 
 	}, []);
 
-	console.log("PRD", products);
+	// console.log("PRD", products);
 	return (
 		<div className='List-Product'>
 			{isLoading ? <Spinner/> : null}

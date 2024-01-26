@@ -5,7 +5,7 @@ export const nodemailerSend = async (req, res) => {
 
     try {
         resultado = await transporter.sendMail({
-            from: "TEST MAIL rogeliosuleta@gmail.com",
+            from: "TEST MAIL harmed2002@gmail.com",
             to: "andresrogesu@gmail.com",
             subject: "Hola, buenas tardes",
             html:

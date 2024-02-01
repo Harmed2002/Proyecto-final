@@ -19,7 +19,7 @@ const defaultTheme = createTheme();
 const Logout = () => {
 	const navigate = useNavigate();
 
-    const logout = async () => {
+    const exit = async () => {
         try {
             const response = await fetch('http://localhost:4000/api/sessions/logout', {
                 method: 'GET',
@@ -27,10 +27,12 @@ const Logout = () => {
                     'Content-Type': 'application/json',
                 },
             })
+
             if (response.status === 200) {
-                // Limpia el token del almacenamiento local
                 const data = await response.json();
-                console.log("datos", data);
+                // console.log("datos", data);
+                
+                // Limpia el token del almacenamiento local
                 localStorage.removeItem('jwtCookie');
                 navigate('/login');
 
@@ -58,7 +60,7 @@ const Logout = () => {
 				>
 					<Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}><LockOutlinedIcon /></Avatar>
 					<Typography component="h1" variant="h5">Logout</Typography>
-					<Button fullWidth variant="contained" sx={{ mt: 3, mb: 2 }} color="error" onClick={logout}>Confirm!</Button>
+					<Button fullWidth variant="contained" sx={{ mt: 3, mb: 2 }} color="error" onClick={exit}>Confirm!</Button>
 				</Box>
 			</Container>
 		</ThemeProvider>

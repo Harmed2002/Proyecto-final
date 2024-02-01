@@ -1,7 +1,7 @@
 import passport from 'passport';
 
 
-//funcion general para retornar errores en las estrategias de passport
+// función para retornar errores en las estrategias de Passport
 
 export const passportError = (strategy) => {
     return async (req, res, next) => {
@@ -11,8 +11,10 @@ export const passportError = (strategy) => {
                 //retornamos next porque depende el tipo de error sera como lo manejaremos.
                 return next(error)
             }
+
             if (!user) {
-                res.status(401).send({ error: info.messages ? info.messages : info.toString() }) //aqui me aseguro que no me tire errores, ya que dependera de la estrategia si envia un string u objeto simple, o un objeto.
+                res.status(401).send({ error: info.messages ? info.messages : info.toString() }) // Aqui me aseguro que no me tire errores, ya que dependera de la estrategia si envia un string u objeto simple, o un objeto.
+
             } else {
                 req.user = user
                 next()

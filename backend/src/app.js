@@ -22,7 +22,7 @@ const app = express();
 
 const specs = swaggerJSDoc(swaggerOptions);
 
-const whiteList = ['http://192.168.80.14:5173']
+const whiteList = ['http://192.168.80.12:5173']
 // const whiteList = ['http://localhost:5173/']
 
 const corsOptions = {

@@ -1,11 +1,8 @@
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, Link, useParams } from 'react-router-dom';
+import Spinner from '../../components/Spinner/Spinner';
 import CardProduct from '../../components/CardProduct/CardProduct';
-import { Link } from 'react-router-dom';
-
-// Imports de Firebase
-import { db } from "../../firebase/firebaseConfig";
-import { collection, query, where, getDocs } from "firebase/firestore";
+import image from '../../assets/images/fake-img.png';
 
 const styles = {
 	containerContact: {
@@ -15,34 +12,62 @@ const styles = {
 };
 
 const CategoryPage = () => {
-	let { category } = useParams();
+    const navigate = useNavigate();
+	const [isLoading, setIsLoading] = useState(false);
 	const [cat, setCat] = useState([]);
+	let { category } = useParams();
 	let detail = false;
 	
 	useEffect(() => {
-		const getProducts = async () => {
-			const q = query(collection(db, "products"), where("category", "==", category));
-			const querySnapshot = await getDocs(q);
-			const docs = [];
+		const getProductsByCategory = async () => {
+			setIsLoading(true);
 
-			querySnapshot.forEach((doc) => {
-				docs.push({ ...doc.data(), id: doc.id });	// Unimos en un solo array la data y el id que vienen separados de Firestore
-			});
+			try {
+				// Obtengo los productos de la categoría
+                const response = await fetch(`http://localhost:4000/api/products/category/${category}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                })
 
-			setCat(docs);	// Pasamos a cat todo lo que trae docs de Firestore
+                if (response.status == 200) {
+                    const data = await response.json();
+                    setCat(data);
+
+                } else if (response.status === 401) {
+                    const datos = await response.json()
+                    console.error('Error al acceder a los productos por categoría', datos);
+					navigate('/')
+
+                } else {
+                    const data = await response.json();
+                    console.log("Error", data)
+                }
+
+            } catch (error) {
+                console.log('Error al intentar acceder a esta url', error);
+            }
+
+			setIsLoading(false);
 		};
-		getProducts();
+
+		getProductsByCategory();
+
 	}, [category]);
 
 	return (
 		<>
+			{isLoading ? <Spinner/> : null}
+
 			<h2 style={styles.containerContact}>{category}</h2>
 			<div className='Card-list'>
 				{cat.map((prod) => {
 					return (
-						<div style={{ margin: 5 }} key={prod.id}>
-							<Link to={`/detail/${prod.id}`}>
-								<CardProduct title={prod.title} description={prod.description} category={prod.category} image={prod.image} price={prod.price} detail={detail} />
+						<div style={{ margin: 5 }} key={prod._id}>
+							<Link to={`/detail/${prod._id}`}>
+								<CardProduct id={prod._id} title={prod.title} description={prod.description} category={prod.category} thumbnail={image} price={prod.price} stock={prod.stock} detail={detail} />
+							{/* <CardProduct id={prod._id} title={prod.title} description={prod.description} category={prod.category} thumbnail={image} price={prod.price} stock={prod.stock} detail={detail} /> */}
 							</Link>
 						</div>
 					);

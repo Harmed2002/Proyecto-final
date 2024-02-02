@@ -8,7 +8,7 @@ export const passportError = (strategy) => {
         //recibimos o local o github o jwt
         passport.authenticate(strategy, (error, user, info) => {
             if (error) {
-                //retornamos next porque depende el tipo de error sera como lo manejaremos.
+                // Retornamos next porque depende el tipo de error sera como lo manejaremos
                 return next(error)
             }
 

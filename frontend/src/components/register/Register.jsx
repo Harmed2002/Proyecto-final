@@ -4,8 +4,6 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
@@ -17,13 +15,14 @@ import Spinner from '../Spinner/Spinner';
 
 //import './Register.css';
 
-import FormControl from '@mui/material/FormControl';
-import Visibility from '@mui/icons-material/Visibility';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import InputAdornment from '@mui/material/InputAdornment';
-import IconButton from '@mui/material/IconButton';
-import InputLabel from '@mui/material/InputLabel';
+// import FormControl from '@mui/material/FormControl';
+// import Visibility from '@mui/icons-material/Visibility';
+// import VisibilityOff from '@mui/icons-material/VisibilityOff';
+// import OutlinedInput from '@mui/material/OutlinedInput';
+// import InputAdornment from '@mui/material/InputAdornment';
+// import IconButton from '@mui/material/IconButton';
+// import InputLabel from '@mui/material/InputLabel';
+// import FormControlLabel from '@mui/material/FormControlLabel';
 
 const defaultTheme = createTheme();
 
@@ -31,21 +30,21 @@ const Register = () => {
 	const formRef = useRef(null);
 	const navigate = useNavigate();
 	const [isLoading, setIsLoading] = useState(false);
-	const [showPassword, setShowPassword] = useState(false);
+	// const [showPassword, setShowPassword] = useState(false);
 	
-	const handleClickShowPassword = () => {
-		setShowPassword((show) => !show);
-	};
+	// const handleClickShowPassword = () => {
+	// 	setShowPassword((show) => !show);
+	// };
 
-	const handleMouseDownPassword = (event) => {
-		event.preventDefault();
-	};
+	// const handleMouseDownPassword = (event) => {
+	// 	event.preventDefault();
+	// };
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-		setIsLoading(true);
-
+		
 		try {
+			setIsLoading(true);
 			const formData = new FormData(formRef.current); // Tranformo un HTML en un objet iterator
 			const data = Object.fromEntries(formData)
 			console.log(data);
@@ -57,6 +56,8 @@ const Register = () => {
 				},
 				body: JSON.stringify(data)
 			});
+
+			setIsLoading(false);
 
 			if (response.status == 200) {
 				console.log("Usuario registrado exitosamente");
@@ -111,19 +112,6 @@ const Register = () => {
 					</Box>
 				</Box>
 			</Container>
-
-
-			{/* <h1 className="login">REGISTER</h1>
-			<form id="idForm" onSubmit={handleSubmit} ref={formRef}>
-
-				<button type="submit" id="buttonRegister">REGISTER</button>
-				<button type="button" id="gitHubButton">Ingresar con github</button>
-			</form>
-			<div id="userContainer">
-				<h1></h1>
-			</div>
-			<div id="errorContainer"> */}
-
 		</ThemeProvider>
 	)
 }

@@ -1,53 +1,55 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 
-import { useContext } from "react";
+import { useState, useContext } from 'react';
+
 import { Link } from "react-router-dom";
 import { SalesContext } from "../../context/SalesContext";
 import { Card, CardContent, CardMedia, Typography, CardActionArea, CardActions, Button } from "@mui/material";
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import ArrowBackTwoToneIcon from '@mui/icons-material/ArrowBackTwoTone';
 import ItemCount from "../ItemCount/ItemCount";
-
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
+import image from '../../assets/images/fake-img.png';
 
 import './CardProduct.css';
 
 
 const CardProduct = ( props ) => {
 	// Desestructurando:
-	const { id, title, description, category, image, price, stock, detail} = props;
-	// const [items, qtyTotal, addItemToCart] = useContext(SalesContext);
+	const { id, title, description, category, thumbnail, price, stock, detail} = props;
+	const [items, qtyTotal, addItemToCart] = useContext(SalesContext);
+	const [isLoading, setIsLoading] = useState(false);
+	
+	// Verifico que la imagen no venga vacía
+	if (thumbnail.length == 0) thumbnail.push(image)
 
 	const newItem = {
-			id:				id,
-			title:			title,
-			description: 	description,
-			category: 		category,
-			image: 			image,
-			price: 			price,
-			quantity: 		0
-		};
+		id:				id,
+		title:			title,
+		description: 	description,
+		category: 		category,
+		thumbnail: 		thumbnail,
+		price: 			price,
+		quantity: 		0
+	};
 
-	// const addCart = () => {
-	// 	addItemToCart(newItem);
-	// }
+	const addCart = () => {
+		addItemToCart(newItem);
+	}
+
+	// console.log("newItem", newItem)
 
 	return (
 		<Card sx={{ maxWidth: 300, backgroundColor:'red' }}>
 			<CardActionArea>
 				<div className="imagen">
-					<CardMedia 
-						component="img" 
-						height="400" 
-						image={image} 
-						alt="logo-product"
-					/>
+					<CardMedia component="img" height="400" image={thumbnail} alt="logo-product" />
 				</div>
 				{
 					detail 
-					? <CardActions sx={{ backgroundColor:'orange' }} >
+					?	<CardActions sx={{ backgroundColor:'orange' }} >
 							<div className="buyContainer">
 								<Tooltip title="Back to Gallery">
 									<Link to="/">
@@ -56,11 +58,11 @@ const CardProduct = ( props ) => {
 										</IconButton>
 									</Link>
 								</Tooltip>
-								{/* <Tooltip title="Add to Cart">
+								<Tooltip title="Add to Cart">
 									<IconButton onClick={ () => addCart() }>
 										<AddShoppingCartIcon />
 									</IconButton>
-								</Tooltip> */}
+								</Tooltip>
 								<ItemCount stock={ stock } newItem={ newItem } />
 							</div>
 						</CardActions>

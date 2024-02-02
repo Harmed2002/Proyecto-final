@@ -25,9 +25,8 @@ const cartSchema = new Schema({
 
 //lo que hago es definir que cada vez que me hagan una consulta con findOne trabaje directamente con populate
 cartSchema.pre('findOne', function() {
-    this.populate('products.id_prod'); 
+    this.populate('products.id_prod');
 })
 
 
 export const cartModel = model('carts', cartSchema)
-

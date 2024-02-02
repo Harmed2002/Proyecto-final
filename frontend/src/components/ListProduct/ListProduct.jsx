@@ -2,29 +2,25 @@ import { useState, useEffect } from 'react';
 import CardProduct from '../CardProduct/CardProduct';
 import Spinner from '../Spinner/Spinner';
 import { useNavigate, Link } from 'react-router-dom';
-import { getCookiesByName } from '../../utils/formsUtils';
 import image from '../../assets/images/fake-img.png';
 
 import './ListProduct.css';
 
 const ListProduct = () => {
-	const [products, setProducts] = useState([]);
-	const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
-
+	const [isLoading, setIsLoading] = useState(false);
+	const [products, setProducts] = useState([]);
 	let detail = false;
 
 	useEffect(() => {
 		const getProducts = async () => {
 			setIsLoading(true);
+
 			try {
-                const token = getCookiesByName('jwtCookie');
 				// Obtengo todos los productos
                 const response = await fetch('http://localhost:4000/api/products', {
                     method: 'GET',
-                    credentials: 'include',
                     headers: {
-                        'Authorization': `${token}`,
                         'Content-Type': 'application/json'
                     },
                 })
@@ -54,7 +50,7 @@ const ListProduct = () => {
 
 	}, []);
 
-	// console.log("PRD", products);
+	// console.log("PROD", products);
 	return (
 		<div className='List-Product'>
 			{isLoading ? <Spinner/> : null}
@@ -64,7 +60,7 @@ const ListProduct = () => {
 					return (
 						<div style={{ margin: 5 }} key={prod._id}>
 							<Link to={`/detail/${prod._id}`}>
-								<CardProduct id={prod._id} title={prod.title} description={prod.description} category={prod.category} image={image} price={prod.price} stock={prod.stock} detail={detail} />
+								<CardProduct id={prod._id} title={prod.title} description={prod.description} category={prod.category} thumbnail={image} price={prod.price} stock={prod.stock} detail={detail} />
 							</Link>
 						</div>
 					);

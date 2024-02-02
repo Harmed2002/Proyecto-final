@@ -25,9 +25,9 @@ const Login = () => {
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
-		setIsLoading(true);
 		
 		try {
+			setIsLoading(true);
 			const datForm = new FormData(formRef.current); // Tranformo un HTML en un objet iterator
 			const data = Object.fromEntries(datForm);
 			
@@ -38,6 +38,8 @@ const Login = () => {
 				},
 				body: JSON.stringify(data)
 			});
+
+			setIsLoading(true);
 	
 			if (response.status == 200) {
 				const datos = await response.json();
@@ -69,7 +71,7 @@ const Login = () => {
 			<Container component="main" maxWidth="xs">
 				<CssBaseline />
 				<Box sx={{marginTop: 8, display: 'flex', flexDirection: 'column', alignItems: 'center',}}>
-					{isLoading ? <Spinner/> : null}
+					{/* {isLoading ? <Spinner/> : null} */}
 					<Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}><LockOutlinedIcon /></Avatar>
 					<Typography component="h1" variant="h5">Sign In</Typography>
 					<Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }} ref={formRef} >
@@ -86,6 +88,7 @@ const Login = () => {
 							</Grid>
 						</Grid>
 					</Box>
+					{isLoading ? <Spinner/> : null}
 				</Box>
 			</Container>
 		</ThemeProvider>

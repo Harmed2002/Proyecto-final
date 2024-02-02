@@ -1,10 +1,17 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable no-unused-vars */
+
 import { useState, useEffect } from 'react';
 import CardWidget from "../CardWidget/CardWidget";
 import { useNavigate, Link } from 'react-router-dom';
+import Login from '../../components/login/Login';
+import Logout from "../../components/logout/Logout";
+import { getCookiesByName } from '../../utils/formsUtils';
 import './NavBar.css';
 
 const NavBar = () => {
 	const [products, setProducts] = useState([]);
+	const token = getCookiesByName('jwtCookie');
 	const categories = [];
 	const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
@@ -70,6 +77,7 @@ const NavBar = () => {
 					</ul>
 				</li>
 				<Link to="/shop"><CardWidget /></Link>
+				{ token ? <Link to="/Logout">Logout</Link> : <Link to="/Login">Login</Link> }
 			</ul>
 		</nav>
 	);

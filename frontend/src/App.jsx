@@ -19,7 +19,7 @@ import { SalesProvider } from "./context/SalesContext";
 import HomePage from "./pages/HomePage/HomePage";
 import DetailPage from "./pages/DetailPage/DetailPage";
 import CategoryPage from "./pages/CategoryPage/CategoryPage";
-// import ShopPage from './pages/ShopPage/ShopPage';
+import ShopPage from './pages/ShopPage/ShopPage';
 
 
 const App = () => {
@@ -40,6 +40,7 @@ const App = () => {
 					<Route path="/detail/:id" element={<DetailPage />} />
 					<Route path='/checkout/:cartId' element={<Checkout />} />
 					<Route path="/category/:category" element={<CategoryPage />} />
+					<Route path="/shop" element={<ShopPage />} />
 				</Routes>
 			</BrowserRouter>
 		</SalesProvider>

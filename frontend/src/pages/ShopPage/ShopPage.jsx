@@ -1,16 +1,20 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
+
 import React, { useState, useContext, useEffect } from 'react';
-import { TextField } from '@mui/material';
+import { useNavigate, Link } from 'react-router-dom';
+import { TextField, Card, CardContent, CardMedia, Typography, CardActionArea, CardActions, Button } from "@mui/material";
+// import { AddShoppingCartIcon, VpnKeyOutlined } from '@mui/icons-material';
+import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
+import VpnKeyOutlined from '@mui/icons-material/VpnKeyOutlined';
 import MessageSuccess from "../../components/MessageSuccess/MessageSuccess";
 import PurchaseDetails from "../../components/PurchaseDetails/PurchaseDetails";
+import { getCookiesByName } from '../../utils/formsUtils';
+import "./ShopPage.css";
+
 // Context
 import { SalesContext } from "../../context/SalesContext";
-// Firebase
-import { collection, addDoc } from "firebase/firestore";
-import { db } from "../../firebase/firebaseConfig";
 
-import "./ShopPage.css";
 
 const initialState = {
 	name: "",
@@ -20,16 +24,23 @@ const initialState = {
 };
 
 const ShopPage = () => {
+	const token = getCookiesByName('jwtCookie');
+    const navigate = useNavigate();
 	// const outerTheme = useTheme();
 	const [values, setValues] = useState(initialState); // Para setear los datos del form
 	const [purchaseID, setPurchaseID] = useState(""); // Guarda el id de la compra
 	const [items, qtyTotal, addItemToCart, clearCart] = useContext(SalesContext);
 	const [email, setEmail] = useState("");
 	const [emailError, setEmailError] = useState(false);
-	const [disabledButton, setDisabledButton] = useState(true);
+	const [visibleButtons, setVisibleButtons] = useState(false);
 
 	useEffect(() => {
-		setDisabledButton(items.length == 0 ? true : false);
+		setVisibleButtons(items.length == 0 ? false : true);
+	}, [items]);
+
+	// Obtengo los datos del usr logueado
+	useEffect(() => {
+		
 	}, [items]);
 
 	// Manejador de los campos del formulario
@@ -39,9 +50,7 @@ const ShopPage = () => {
 	};
 
 	// Envío de datos del formulario
-	const onSubmit = async (e) => {
-		e.preventDefault();
-
+	const savePurchase = async () => {
 		// Valido que el campo de email no esté vacío
 		setEmailError(false);
         if (email == '') {
@@ -58,69 +67,48 @@ const ShopPage = () => {
 		const todayTime = new Date(Date.now());
 		const today = todayTime.getFullYear().toString() + '-' + (todayTime.getMonth() + 1).toString().padStart(2, '0') + '-' + todayTime.getDate().toString();
 
-		// Add a new document with a generated id.
+		// Grabo los datos de la compra y obtengo el id generado de la misma
 		const docRef = await addDoc(collection(db, "purchases"), {values, items: object, date: today});
 		setPurchaseID(docRef.id);
 		setValues(initialState); // Se limpia el form
 		clearCart(); // Se limpia el carrito
-		setDisabledButton(true);
+		setVisibleButtons(true);
 	};
 
 	return (
 		<>
 			{/* {(items && items.length > 0) ?  */}
 				<div className='containerShop'>
-					<div className='detailsContainer'>
-						<h2>Purchase Details</h2>
-						<PurchaseDetails />
-					</div>
+					{
+						visibleButtons ?
+							<div className='detailsContainer'>
+								<h2>Purchase Details</h2>
+								<PurchaseDetails />
+							</div>
+						: <h2>No items in the shopping cart</h2>
+					}
+
 					<div className="FormContainer">
-						<h2>Personal Information</h2>
-						<form onSubmit={onSubmit}>
-							<TextField 
-								color="secondary"
-								placeholder="Name"
-								style={{ margin: 10, width: 500 }}
-								name="name"
-								value={values.name}
-								onChange={handleOnChange}
-								label="Name"
-								required
-							/>
-							<TextField
-								color="secondary"
-								placeholder="Last Name"
-								style={{ margin: 10, width: 500 }}
-								name="lastname"
-								value={values.lastname}
-								onChange={handleOnChange}
-								label="Last Name"
-								required
-							/>
-							<TextField
-								color="secondary"
-								placeholder="Phone"
-								style={{ margin: 10, width: 500 }}
-								name="phone"
-								value={values.phone}
-								onChange={handleOnChange}
-								label="Phone"
-							/>
-							<TextField
-								color="secondary"
-								placeholder="Email"
-								style={{ margin: 10, width: 500 }}
-								name="email"
-								value={values.email}
-								onChange={handleOnChange}
-								label="Email"
-								type="email"
-								required
-								onBlur={e => setEmail(e.target.value)}
-								error={emailError}
-							/>
-							<button className="btnASendAction" type="submit" disabled={disabledButton}>Finalizar Compra</button>
-						</form>
+						{
+							visibleButtons ?	
+								<Card sx={{ width: 600, backgroundColor:'white' }}>
+									<CardContent>
+										<Typography variant="h5" color="black">Personal Information</Typography>
+										<hr color="black"></hr>
+										{ token ?
+											<Typography variant="h8" color="black">{token}</Typography>
+										:	<Typography variant="h8" color="black">There is no personal information. You must be logged in to complete the purchase</Typography>
+										}
+									</CardContent>
+									<CardActionArea>
+										<CardActions sx={{ backgroundColor:'white' }} >
+											{ token ? null : <Button variant="contained" fullWidth onClick={ () => navigate('/login') } startIcon={<VpnKeyOutlined />}>Login</Button> }
+											{ token ? <Button variant="contained" color="success" fullWidth onClick={ () => savePurchase() } startIcon={<AddShoppingCartIcon />}>Finish purchase</Button> : null }
+										</CardActions>
+									</CardActionArea>
+								</Card>
+							: null
+						}
 						{purchaseID && <MessageSuccess purchaseID={purchaseID} />}
 					</div>
 				</div>

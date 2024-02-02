@@ -41,7 +41,6 @@ const Checkout = () => {
     }
 
 
-
     return (
         <div>
             <button onClick={getTicket}>REALIZAR COMPRA</button>

@@ -7,8 +7,7 @@ import GithubStrategy from 'passport-github2';
 import { userModel } from '../models/users.models.js';
 
 
-//definimos la estrategia
-
+// Definimos la estrategia
 const LocalStrategy = local.Strategy;
 const JWTStrategy = jwt.Strategy
 
@@ -29,10 +28,12 @@ const initializePassport = () => {
     passport.use('jwt', new JWTStrategy({
         jwtFromRequest: ExtractJWT.fromExtractors([cookieExtractor]), //el token vendra desde cookieExtractor.
         secretOrKey: process.env.JWT_SECRET
+
     }, async (jwt_payload, done) => {//jwt_payload = info del token (en este caso datos del cliente)                            
         try {
-            console.log("payload: ", jwt_payload);
+            // console.log("payload.user.first_name: ", jwt_payload.user.first_name);
             return done(null, jwt_payload);
+
         } catch (error) {
             return done(error);
         }
@@ -79,6 +80,7 @@ const initializePassport = () => {
 
                 if (validatePassword(password, user.password)) {
                     return done(null, user);
+
                 } else {
                     return done(null, false);
                 }
@@ -101,6 +103,7 @@ const initializePassport = () => {
             const user = await userModel.findOne({ email: profile._json.email })
             if (user) {
                 done(null, false);
+
             } else {
                 const userCreated = await userModel.create({
                     first_name: profile._json.name,

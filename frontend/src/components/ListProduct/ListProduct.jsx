@@ -40,7 +40,7 @@ const ListProduct = () => {
                 }
 
             } catch (error) {
-                console.log('Error al intentar acceder a esta url.s', error);
+                console.log('Error al intentar acceder a esta url', error);
             }
 
 			setIsLoading(false);

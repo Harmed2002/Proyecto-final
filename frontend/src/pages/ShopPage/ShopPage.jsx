@@ -4,27 +4,26 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { TextField, Card, CardContent, CardMedia, Typography, CardActionArea, CardActions, Button } from "@mui/material";
-// import { AddShoppingCartIcon, VpnKeyOutlined } from '@mui/icons-material';
-import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
+import ShoppingCartCheckoutOutlined from '@mui/icons-material/ShoppingCartCheckoutOutlined';
 import VpnKeyOutlined from '@mui/icons-material/VpnKeyOutlined';
 import MessageSuccess from "../../components/MessageSuccess/MessageSuccess";
 import PurchaseDetails from "../../components/PurchaseDetails/PurchaseDetails";
 import { getCookiesByName } from '../../utils/formsUtils';
+import Spinner from '../../components/Spinner/Spinner';
 import "./ShopPage.css";
 
 // Context
 import { SalesContext } from "../../context/SalesContext";
 
-
 const initialState = {
-	name: "",
-	lastname: "",
-	phone: "",
+	first_name: "",
+	last_name: "",
 	email: "",
+	rol: "",
+	cart: ""
 };
 
 const ShopPage = () => {
-	const token = getCookiesByName('jwtCookie');
     const navigate = useNavigate();
 	// const outerTheme = useTheme();
 	const [values, setValues] = useState(initialState); // Para setear los datos del form
@@ -33,6 +32,9 @@ const ShopPage = () => {
 	const [email, setEmail] = useState("");
 	const [emailError, setEmailError] = useState(false);
 	const [visibleButtons, setVisibleButtons] = useState(false);
+	const [isLoading, setIsLoading] = useState(false);
+	const [userData, setUserData] = useState({});
+	const token = getCookiesByName('jwtCookie');
 
 	useEffect(() => {
 		setVisibleButtons(items.length == 0 ? false : true);
@@ -40,8 +42,47 @@ const ShopPage = () => {
 
 	// Obtengo los datos del usr logueado
 	useEffect(() => {
-		
-	}, [items]);
+		const getUserData = async () => {
+			if (token) {
+				setIsLoading(true);
+
+				try {
+					// Obtengo todos los datos del usuario
+					const response = await fetch('http://localhost:4000/api/sessions/current', {
+						method: 'GET',
+						credentials: 'include',
+						headers: {
+							'Authorization': `${token}`,
+							'Content-Type': 'application/json'
+						},
+					})
+
+					if (response.status == 200) {
+						const data = await response.json();
+						setUserData(data.user);
+
+					} else if (response.status === 401) {
+						const datos = await response.json()
+						console.error('Error al acceder a los datos del usuario actual', datos);
+						navigate('/')
+
+					} else {
+						const data = await response.json();
+						console.log("Error", data)
+					}
+
+				} catch (error) {
+					console.log('Error al intentar acceder a esta url', error);
+				}
+
+				setIsLoading(false);
+			}
+		};
+
+		getUserData();
+
+	}, []);
+
 
 	// Manejador de los campos del formulario
 	const handleOnChange = (e) => {
@@ -68,8 +109,8 @@ const ShopPage = () => {
 		const today = todayTime.getFullYear().toString() + '-' + (todayTime.getMonth() + 1).toString().padStart(2, '0') + '-' + todayTime.getDate().toString();
 
 		// Grabo los datos de la compra y obtengo el id generado de la misma
-		const docRef = await addDoc(collection(db, "purchases"), {values, items: object, date: today});
-		setPurchaseID(docRef.id);
+		// const docRef = await addDoc(collection(db, "purchases"), {values, items: object, date: today});
+		// setPurchaseID(docRef.id);
 		setValues(initialState); // Se limpia el form
 		clearCart(); // Se limpia el carrito
 		setVisibleButtons(true);
@@ -78,6 +119,7 @@ const ShopPage = () => {
 	return (
 		<>
 			{/* {(items && items.length > 0) ?  */}
+				{isLoading ? <Spinner/> : null}
 				<div className='containerShop'>
 					{
 						visibleButtons ?
@@ -96,14 +138,18 @@ const ShopPage = () => {
 										<Typography variant="h5" color="black">Personal Information</Typography>
 										<hr color="black"></hr>
 										{ token ?
-											<Typography variant="h8" color="black">{token}</Typography>
-										:	<Typography variant="h8" color="black">There is no personal information. You must be logged in to complete the purchase</Typography>
+											<div>
+												<Typography variant="h8" color="black">Name: {userData.first_name} {userData.last_name}</Typography><br></br>
+												<Typography variant="h8" color="black">Email: {userData.email}</Typography>
+											</div>
+										:	
+											<Typography variant="h8" color="black">There is no personal information. You must be logged in to complete the purchase</Typography>
 										}
 									</CardContent>
 									<CardActionArea>
 										<CardActions sx={{ backgroundColor:'white' }} >
 											{ token ? null : <Button variant="contained" fullWidth onClick={ () => navigate('/login') } startIcon={<VpnKeyOutlined />}>Login</Button> }
-											{ token ? <Button variant="contained" color="success" fullWidth onClick={ () => savePurchase() } startIcon={<AddShoppingCartIcon />}>Finish purchase</Button> : null }
+											{ token ? <Button variant="contained" color="success" fullWidth onClick={ () => savePurchase() } startIcon={<ShoppingCartCheckoutOutlined />}>Finish purchase</Button> : null }
 										</CardActions>
 									</CardActionArea>
 								</Card>

@@ -37,7 +37,7 @@ if (process.env.MODO == 'DEVELOPMENT') {
     }
 }
 
-    //podemos generar el guardado implementando cada uno de ellos y guardarlos de forma independiente.
+    // Podemos generar la grabación implementando cada uno de ellos y guardarlos de forma independiente.
     const transports = [
         new winston.transports.File({
             filename: './errors_fatal.log',

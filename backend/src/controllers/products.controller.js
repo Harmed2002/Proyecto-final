@@ -66,12 +66,13 @@ export const postProduct = async (req, res) => {
 
 		if (product) {
 			res.status(201).send(product);
+
 		} else {
 			res.status(400).send({ error: 'error en crear producto' });
 		}
 
 	} catch (error) {
-		// Error code de llave duplicada
+		// Code error de llave duplicada
 		if (error.code == 11000) {
 			res.status(400).send({ error: 'producto ya creado con llave duplicada' });
 
@@ -90,7 +91,7 @@ export const putProduct = async (req, res) => {
 		const product = await productModel.findByIdAndUpdate(id, { title, description, code, price, stock, category, thumbnail });
 
 		if (product) {
-			res.status(201).send(product);
+			return res.status(201).send(product);
 		}
 
 		res.status(400).send({ error: 'error en actualizar producto' });

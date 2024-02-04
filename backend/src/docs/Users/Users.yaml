@@ -149,10 +149,10 @@ components:
           description: Password del usuario
       example:
         _id: objectId('32123123')
-        first_name: Ana
-        last_name: Alvarez
-        email: ana@gmail.com
-        password: asdhsajdhasjk21
+        first_name: Sandra
+        last_name: Valbuena
+        email: sandra@mail.com
+        password: sandra54321
   
 
 

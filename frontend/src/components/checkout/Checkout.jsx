@@ -24,11 +24,14 @@ const Checkout = () => {
                 console.log("compra realizada")
                 console.log(data.ticket)
                 setTicket(data.ticket);
+
             } else if (response.status === 404) {
                 console.error('Errores 404', response);
+
             } else {
                 console.log("error 500", response)
             }
+
         } catch (error) {
             console.log('error', error);
         }

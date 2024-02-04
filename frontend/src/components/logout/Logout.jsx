@@ -12,8 +12,6 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
-import NavBar from '../NavBar/NavBar';
-
 const defaultTheme = createTheme();
 
 const Logout = () => {
@@ -29,11 +27,14 @@ const Logout = () => {
             })
 
             if (response.status === 200) {
-                const data = await response.json();
+                // const data = await response.json();
                 // console.log("datos", data);
                 
                 // Limpia el token del almacenamiento local
                 localStorage.removeItem('jwtCookie');
+                // Elimina la cookie del lado del cliente (se le cambia la fecha de expiración)
+                document.cookie = "jwtCookie=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+                // Redirecciona a la página de login
                 navigate('/login');
 
             } else {
@@ -47,7 +48,6 @@ const Logout = () => {
 
 	return (
 		<ThemeProvider theme={defaultTheme}>
-            <NavBar />
 			<Container component="main" maxWidth="xs">
 				<CssBaseline />
 				<Box

@@ -24,6 +24,7 @@ const specs = swaggerJSDoc(swaggerOptions);
 
 const whiteList = ['http://192.168.80.13:5173']
 // const whiteList = ['http://localhost:5173/']
+// const whiteList = ['http://127.0.0.1:5173/']
 
 const corsOptions = {
     origin: function (origin, callback) {

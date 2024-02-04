@@ -62,7 +62,18 @@ export const logout = async (req, res) => {
 		// sino, va esto:
 		// const lst = window.localStorage.getItem('jwtCookie');
 		// console.log("TOKENJWT", lst);
-		res.clearCookie('jwtCookie');
+
+		// res.clearCookie('jwtCookie');
+		// res.clearCookie('jwtCookie', { domain: '192.168.80.13', httpOnly: true, secure: true });
+		// res.clearCookie('jwtCookie', { domain: '192.168.80.13', path: '/' });
+		// res.status(200).clearCookie('jwtCookie', {
+		// 	path: '/',
+		// 	secure: false,
+		// 	httpOnly: false,
+		// 	domain: '192.168.80.13',
+		// 	sameSite: false,
+		// });
+
 		// window.localStorage.removeItem('jwtCookie');
 		res.status(200).send({ resultado: 'usuario deslogueado' })
 

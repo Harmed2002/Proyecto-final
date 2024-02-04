@@ -30,7 +30,6 @@ const ShopPage = () => {
 	const [purchaseID, setPurchaseID] = useState(""); // Guarda el id de la compra
 	const [items, qtyTotal, addItemToCart, clearCart] = useContext(SalesContext);
 	const [email, setEmail] = useState("");
-	const [emailError, setEmailError] = useState(false);
 	const [visibleButtons, setVisibleButtons] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
 	const [userData, setUserData] = useState({});
@@ -92,12 +91,6 @@ const ShopPage = () => {
 
 	// Envío de datos del formulario
 	const savePurchase = async () => {
-		// Valido que el campo de email no esté vacío
-		setEmailError(false);
-        if (email == '') {
-            setEmailError(true)
-        }
-
 		// Convierto el array en un objeto
 		const object = items.reduce((acc, item) => {
 			acc[item.id] = item
@@ -109,8 +102,33 @@ const ShopPage = () => {
 		const today = todayTime.getFullYear().toString() + '-' + (todayTime.getMonth() + 1).toString().padStart(2, '0') + '-' + todayTime.getDate().toString();
 
 		// Grabo los datos de la compra y obtengo el id generado de la misma
-		// const docRef = await addDoc(collection(db, "purchases"), {values, items: object, date: today});
-		// setPurchaseID(docRef.id);
+		try {
+			const response = await fetch('http://localhost:4000/api/purchases', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					'Authorization': `${token}`
+				},
+				body: JSON.stringify({
+					...values,
+					date: today,
+					items: object
+				})
+			});
+			if (response.status === 201) {
+				const data = await response.json();
+				setPurchaseID(data.purchaseID);
+				setValues(initialState); // Se limpia el form
+				clearCart(); // Se limpia el carrito
+				setVisibleButtons(true);
+			} else {
+				console.log('Error al guardar la compra');
+			}
+		} catch (error) {
+			console.log('Error al intentar acceder a esta url', error);
+		}
+		
+		// Limpio los valores
 		setValues(initialState); // Se limpia el form
 		clearCart(); // Se limpia el carrito
 		setVisibleButtons(true);
@@ -136,7 +154,7 @@ const ShopPage = () => {
 								<Card sx={{ width: 600, backgroundColor:'white' }}>
 									<CardContent>
 										<Typography variant="h5" color="black">Personal Information</Typography>
-										<hr color="black"></hr>
+										<hr color="red"></hr>
 										{ token ?
 											<div>
 												<Typography variant="h8" color="black">Name: {userData.first_name} {userData.last_name}</Typography><br></br>

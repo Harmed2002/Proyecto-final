@@ -39,19 +39,20 @@ const initializePassport = () => {
         }
     }))
 
-    passport.use('register', new LocalStrategy(
-        { passReqToCallback: true, usernameField: ('email') },
+    passport.use('register', new LocalStrategy({ passReqToCallback: true, usernameField: ('email') }, 
         async (req, username, password, done) => {
-            ///registro de usuario
             const { first_name, last_name, email, age } = req.body;
+
             try {
+                // Verifico si existe un usr con ese mismo email
                 const user = await userModel.findOne({ email: username });
 
-                //caso de error
+                // Si lo encuentra
                 if (user) {
                     return done(null, false);
                 }
-                //crear usuario
+
+                // Si no lo encuentra, crea el usuario
                 const passwordHash = createHash(password);
                 const userCreated = await userModel.create({
                     first_name: first_name,
@@ -60,6 +61,7 @@ const initializePassport = () => {
                     email: email,
                     password: passwordHash
                 });
+
                 return done(null, userCreated)
 
             } catch (error) {
@@ -72,12 +74,15 @@ const initializePassport = () => {
     passport.use('login', new LocalStrategy(
         { usernameField: 'email' }, async (username, password, done) => {
             try {
+                // Verifico si existe un usr con ese mismo email
                 const user = await userModel.findOne({ email: username })
 
+                // Si no existe, retorno error
                 if (!user) {
                     return done(null, false);
                 }
 
+                // S existe valido la clave
                 if (validatePassword(password, user.password)) {
                     return done(null, user);
 

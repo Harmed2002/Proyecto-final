@@ -46,9 +46,9 @@ const PurchaseDetails = () => {
 						<TableCell align="right">Price</TableCell>
 					</TableRow>
 					<TableRow>
-						<TableCell>Desc</TableCell>
+						<TableCell>Description</TableCell>
 						<TableCell align="right">Qty.</TableCell>
-						<TableCell align="right">Unit</TableCell>
+						<TableCell align="right">Units</TableCell>
 						<TableCell align="right">Sum</TableCell>
 					</TableRow>
 				</TableHead>

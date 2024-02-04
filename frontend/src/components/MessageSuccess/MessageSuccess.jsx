@@ -5,11 +5,12 @@
 import Alert from "@mui/material/Alert";
 import Stack from "@mui/material/Stack";
 
-const MessageSuccess = ({ purchaseID }) => {
+const MessageSuccess = ({ purchaseCode }) => {
+	console.log(purchaseCode)
 	return (
 		<Stack sx={{ width: "100%" }} spacing={2}>
 			<Alert severity="success">
-				¡Gracias por su compra! su id de transacción es: {purchaseID}
+				¡Gracias por su compra! su id de ticket es: {purchaseCode}
 			</Alert>
 		</Stack>
 	);

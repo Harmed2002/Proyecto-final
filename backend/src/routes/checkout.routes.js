@@ -3,6 +3,6 @@ import { createTicket } from "../controllers/checkout.controller.js";
 
 const checkoutRouter = Router();
 
-checkoutRouter.get('/:cid', createTicket);
+checkoutRouter.post('/:cid', createTicket);
 
 export default checkoutRouter;

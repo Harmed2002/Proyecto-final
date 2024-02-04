@@ -47,7 +47,6 @@ const Register = () => {
 			setIsLoading(true);
 			const formData = new FormData(formRef.current); // Tranformo un HTML en un objet iterator
 			const data = Object.fromEntries(formData)
-			console.log(data);
 
 			const response = await fetch('http://localhost:4000/api/sessions/register', {
 				method: 'POST',

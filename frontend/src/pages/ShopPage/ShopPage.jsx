@@ -15,29 +15,21 @@ import "./ShopPage.css";
 // Context
 import { SalesContext } from "../../context/SalesContext";
 
-const initialState = {
-	first_name: "",
-	last_name: "",
-	email: "",
-	rol: "",
-	cart: ""
-};
 
 const ShopPage = () => {
     const navigate = useNavigate();
-	// const outerTheme = useTheme();
-	const [values, setValues] = useState(initialState); // Para setear los datos del form
-	const [purchaseID, setPurchaseID] = useState(""); // Guarda el id de la compra
 	const [items, qtyTotal, addItemToCart, clearCart] = useContext(SalesContext);
-	const [email, setEmail] = useState("");
 	const [visibleButtons, setVisibleButtons] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
 	const [userData, setUserData] = useState({});
 	const token = getCookiesByName('jwtCookie');
+	let purchaseCode = ""; // Guarda el code de la compra
+
 
 	useEffect(() => {
 		setVisibleButtons(items.length == 0 ? false : true);
 	}, [items]);
+
 
 	// Obtengo los datos del usr logueado
 	useEffect(() => {
@@ -83,56 +75,44 @@ const ShopPage = () => {
 	}, []);
 
 
-	// Manejador de los campos del formulario
-	const handleOnChange = (e) => {
-		const { value, name } = e.target;
-		setValues({ ...values, [name]: value });
-	};
-
-	// Envío de datos del formulario
+	// Envío de datos de compras
 	const savePurchase = async () => {
-		// Convierto el array en un objeto
-		const object = items.reduce((acc, item) => {
-			acc[item.id] = item
-			return acc
-		}, {})
+		const cartId = userData.cart;
 
-		// Obtengo la fecha actual
-		const todayTime = new Date(Date.now());
-		const today = todayTime.getFullYear().toString() + '-' + (todayTime.getMonth() + 1).toString().padStart(2, '0') + '-' + todayTime.getDate().toString();
-
-		// Grabo los datos de la compra y obtengo el id generado de la misma
+		// Grabo la compra
 		try {
-			const response = await fetch('http://localhost:4000/api/purchases', {
-				method: 'POST',
+            const response = await fetch(`http://localhost:4000/api/checkout/${cartId}`, {
+                method: 'POST',
+				credentials: 'include',
 				headers: {
-					'Content-Type': 'application/json',
-					'Authorization': `${token}`
+					'Authorization': `${token}`,
+					'Content-Type': 'application/json'
 				},
-				body: JSON.stringify({
-					...values,
-					date: today,
-					items: object
-				})
-			});
-			if (response.status === 201) {
-				const data = await response.json();
-				setPurchaseID(data.purchaseID);
-				setValues(initialState); // Se limpia el form
-				clearCart(); // Se limpia el carrito
-				setVisibleButtons(true);
-			} else {
-				console.log('Error al guardar la compra');
-			}
-		} catch (error) {
-			console.log('Error al intentar acceder a esta url', error);
-		}
-		
+				body: JSON.stringify(items)
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                console.log("compra realizada")
+                // console.log("DATA.ticket.code", data.ticket.code)
+				purchaseCode = data.ticket.code
+
+            } else if (response.status === 404) {
+                console.error('Error 404', response);
+
+            } else {
+                console.log("error 500", response)
+            }
+
+        } catch (error) {
+            console.log('error', error);
+        }
+
 		// Limpio los valores
-		setValues(initialState); // Se limpia el form
 		clearCart(); // Se limpia el carrito
 		setVisibleButtons(true);
 	};
+
 
 	return (
 		<>
@@ -158,7 +138,9 @@ const ShopPage = () => {
 										{ token ?
 											<div>
 												<Typography variant="h8" color="black">Name: {userData.first_name} {userData.last_name}</Typography><br></br>
-												<Typography variant="h8" color="black">Email: {userData.email}</Typography>
+												<Typography variant="h8" color="black">Email: {userData.email}</Typography><br></br>
+												<Typography variant="h8" color="black">Id. Cart: {userData.cart}</Typography>
+												<Typography variant="h8" color="black">Cod. Compra: {purchaseCode}</Typography>
 											</div>
 										:	
 											<Typography variant="h8" color="black">There is no personal information. You must be logged in to complete the purchase</Typography>
@@ -173,7 +155,7 @@ const ShopPage = () => {
 								</Card>
 							: null
 						}
-						{purchaseID && <MessageSuccess purchaseID={purchaseID} />}
+						{purchaseCode && <MessageSuccess purchaseCode={purchaseCode} />}
 					</div>
 				</div>
 			{/*  <h3>El Carrito de compras está vacío</h3> } */}

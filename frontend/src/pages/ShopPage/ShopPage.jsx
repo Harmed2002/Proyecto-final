@@ -23,7 +23,7 @@ const ShopPage = () => {
 	const [isLoading, setIsLoading] = useState(false);
 	const [userData, setUserData] = useState({});
 	const token = getCookiesByName('jwtCookie');
-	let purchaseCode = ""; // Guarda el code de la compra
+	const [purchaseCode, setPurchaseCode] = useState(""); // Guarda el code de la compra
 
 
 	useEffect(() => {
@@ -85,7 +85,8 @@ const ShopPage = () => {
                 method: 'POST',
 				credentials: 'include',
 				headers: {
-					'Authorization': `${token}`,
+					// 'Authorization': `${token}`,
+					'Authorization': `Bearer ${token}`,
 					'Content-Type': 'application/json'
 				},
 				body: JSON.stringify(items)
@@ -94,8 +95,7 @@ const ShopPage = () => {
             if (response.ok) {
                 const data = await response.json();
                 console.log("compra realizada")
-                // console.log("DATA.ticket.code", data.ticket.code)
-				purchaseCode = data.ticket.code
+				setPurchaseCode(data.ticket.code);
 
             } else if (response.status === 404) {
                 console.error('Error 404', response);
@@ -109,8 +109,16 @@ const ShopPage = () => {
         }
 
 		// Limpio los valores
-		clearCart(); // Se limpia el carrito
+		// clearCart(); // Se limpia el carrito
 		setVisibleButtons(true);
+		// setPurchaseCode("");
+
+		setTimeout(() => {
+			console.log("Delayed for 5 second.");
+			clearCart(); // Se limpia el carrito
+			setPurchaseCode("");
+			setVisibleButtons(false);
+		}, 5000);
 	};
 
 
@@ -139,8 +147,7 @@ const ShopPage = () => {
 											<div>
 												<Typography variant="h8" color="black">Name: {userData.first_name} {userData.last_name}</Typography><br></br>
 												<Typography variant="h8" color="black">Email: {userData.email}</Typography><br></br>
-												<Typography variant="h8" color="black">Id. Cart: {userData.cart}</Typography>
-												<Typography variant="h8" color="black">Cod. Compra: {purchaseCode}</Typography>
+												<Typography variant="h8" color="black">Id. Cart: {userData.cart}</Typography><br></br>
 											</div>
 										:	
 											<Typography variant="h8" color="black">There is no personal information. You must be logged in to complete the purchase</Typography>

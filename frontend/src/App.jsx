@@ -8,7 +8,7 @@ import Logout from "./components/logout/Logout";
 // import Header from './components/Header/Header';
 import NavBar from './components/NavBar/NavBar';
 
-import Checkout from './components/checkout/Checkout';
+// import Checkout from './components/checkout/Checkout';
 // import Products from './components/products/Products';
 import NewProducts from './components/newProducts/NewProducts';
 
@@ -38,7 +38,7 @@ const App = () => {
 					<Route path='/products' element={<HomePage />} />
 					<Route path='/new-products' element={<NewProducts />} />
 					<Route path="/detail/:id" element={<DetailPage />} />
-					<Route path='/checkout/:cartId' element={<Checkout />} />
+					{/* <Route path='/checkout/:cartId' element={<Checkout />} /> */}
 					<Route path="/category/:category" element={<CategoryPage />} />
 					<Route path="/shop" element={<ShopPage />} />
 				</Routes>

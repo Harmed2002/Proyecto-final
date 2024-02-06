@@ -2,7 +2,7 @@
 /* eslint-disable no-unused-vars */
 
 import React, { useState, useContext, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+// import { useNavigate, Link } from 'react-router-dom';
 import { TextField, Card, CardContent, CardMedia, Typography, CardActionArea, CardActions, Button } from "@mui/material";
 import ShoppingCartCheckoutOutlined from '@mui/icons-material/ShoppingCartCheckoutOutlined';
 import VpnKeyOutlined from '@mui/icons-material/VpnKeyOutlined';
@@ -17,7 +17,7 @@ import { SalesContext } from "../../context/SalesContext";
 
 
 const ShopPage = () => {
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
 	const [items, qtyTotal, addItemToCart, clearCart] = useContext(SalesContext);
 	const [visibleButtons, setVisibleButtons] = useState(false);
 	const [isLoading, setIsLoading] = useState(false);
@@ -114,7 +114,6 @@ const ShopPage = () => {
 		// setPurchaseCode("");
 
 		setTimeout(() => {
-			console.log("Delayed for 5 second.");
 			clearCart(); // Se limpia el carrito
 			setPurchaseCode("");
 			setVisibleButtons(false);

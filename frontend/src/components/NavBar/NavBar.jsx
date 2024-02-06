@@ -64,6 +64,7 @@ const NavBar = () => {
 		<nav className="NavBar">
 			<ul>
 				<Link to="/">Home</Link>
+				<Link to="/management">Management</Link>
 				<li className="dropdown-li">Categories
 					<ul className="dropdown">
 						{cats.map((element, index) => {

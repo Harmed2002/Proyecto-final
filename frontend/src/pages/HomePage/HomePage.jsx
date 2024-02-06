@@ -12,7 +12,7 @@ const styles = {
 const HomePage = () => {
     return (
         <div style={styles.containerHome}>
-            <h2>Home Page</h2>
+            <h2>Products</h2>
             <ListProduct />
         </div>
     );

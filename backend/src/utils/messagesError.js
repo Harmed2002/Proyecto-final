@@ -28,11 +28,11 @@ export const passportError = (strategy) => {
 export const authorization = (rol) => {
     return async (req, res, next) => {
         if (!req.user) {
-            return res.status(401).send({ error: 'unathorized user: No existe sesion activa' })
+            return res.status(401).send({ error: "Unathorized user: Don't exist active session" });
         }
 
         if (req.user.user.rol != rol) {
-            return res.status(401).send({ error: 'do not have permissions', user : req.user })
+            return res.status(401).send({ error: 'Do not have permissions', user : req.user });
         }
 
         next()

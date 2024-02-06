@@ -47,6 +47,9 @@ export const NewProducts = () => {
 	const formRef = useRef(null);
 	const navigate = useNavigate();
 	const [showMessage, setShowMessage] = useState(false);
+	const [message, setMessage] = useState("");
+	const [severity, setSeverity] = useState("");
+	const [isSubmitting, setIsSubmitting] = useState(false);
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
@@ -70,17 +73,28 @@ export const NewProducts = () => {
 				console.log("Producto creado con éxito");
 				
 				setShowMessage(true);
+				setMessage("Producto creado exitosamente");
+				setSeverity("success");
+				setIsSubmitting(true);
 
 				setTimeout(() => {
 					navigate('/management');
 				}, 3000);
 
 			} else if (response.status === 401) {
-				const datos = await response.json()
+				const datos = await response.json();
 				console.error('Error al intentar crear producto', datos);
 
 			} else {
 				console.log(response);
+				setShowMessage(true);
+				setMessage("Debe digitar todos los datos requeridos");
+				setSeverity("error");
+				setIsSubmitting(false);
+
+				setTimeout(() => {
+					setShowMessage(false);
+				}, 3000);
 			}
 
 		} catch (error) {
@@ -111,18 +125,18 @@ export const NewProducts = () => {
 									</MenuItem>
 								))}
 							</TextField>
-							<TextField type="number" margin="normal" fullWidth id="price" label="Price" name="price" autoComplete="price" style={{ margin: 10, width: 170 }} />
-							<TextField type="number" margin="normal" fullWidth id="stock" label="Stock" name="stock" autoComplete="stock" style={{ margin: 10, width: 160 }} />
+							<TextField type="number" margin="normal" required fullWidth id="price" label="Price" name="price" autoComplete="price" style={{ margin: 10, width: 170 }} />
+							<TextField type="number" margin="normal" required fullWidth id="stock" label="Stock" name="stock" autoComplete="stock" style={{ margin: 10, width: 160 }} />
 						</Stack>
 						<Stack spacing={50} direction='row'>
-							<Button type="submit" variant="contained" sx={{ mt: 3, mb: 2, margin: 10 }}>Create</Button>
+							<Button type="submit" variant="contained" disabled={Boolean(isSubmitting)} sx={{ mt: 3, mb: 2, margin: 10 }}>Create</Button>
 							<Link href="/management">{"Return to list product"}</Link>
 						</Stack>
 					</Box>
 				</Box>
 			</Container>
 			<Stack sx={{ width: "100%" }} spacing={2}>
-				{showMessage && <Alert severity="success">Producto creado exitosamente</Alert>}
+				{showMessage && <Alert severity={severity}>{message}</Alert>}
 			</Stack>
 		</ThemeProvider>
 	)

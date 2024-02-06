@@ -8,7 +8,8 @@ ul {
 	align-items: center;
 	justify-content: space-evenly;
 	width: 100%;
-	background-color: red;
+	/* background-color: red; */
+	background-color: black;
 	font-size: 90%;
 	margin: 0%;
 }
@@ -28,14 +29,14 @@ a {
 /* DROPDOWN   */
 .dropdown-li {
 	position: relative;
-  }
-  
-  .dropdown-li:hover .dropdown {
+}
+
+.dropdown-li:hover .dropdown {
 	display: block;
 	opacity: 1;
-  }
-  
-  .dropdown {
+}
+
+.dropdown {
 	background-color: slateblue;
 	margin: 0;
 	padding: 2px;
@@ -46,9 +47,9 @@ a {
 	opacity: 0;
 	display: none;
 	background: red;
-  }
-  
-  .dropdown li {
+}
+
+.dropdown li {
 	list-style: none;
 	margin: 5%;
-  }
+}

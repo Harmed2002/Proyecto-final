@@ -1,4 +1,5 @@
-import React from 'react';
+import { useState, React } from 'react';
+
 import { TableCell, tableCellClasses, IconButton, Stack, Tooltip } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
@@ -16,15 +17,15 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 }));
 
 
-const TableActionsComponent = ( product ) => {
-	const { prod } = product;
+// const TableActionsComponent = ({ product, handleOpen, handleClose }) => {
+const TableActionsComponent = ( props ) => {
+	const { product, handleOpen, handleClose } = props;
 
-	// console.log("PROD", product);
 	return (
 		<StyledTableCell width="10%" align="right">
 			<Stack spacing={1} direction='row'>
 				<Tooltip title='Edit' placement='left'>
-					<IconButton size='small'>
+					<IconButton size='small' onClick={handleOpen}>
 						<EditOutlinedIcon />
 					</IconButton>
 				</Tooltip>

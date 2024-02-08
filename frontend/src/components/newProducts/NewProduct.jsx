@@ -1,3 +1,6 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable no-unused-vars */
+
 import { useRef, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import { getCookiesByName } from "../../utils/formsUtils.js";
@@ -12,9 +15,24 @@ import MenuItem from '@mui/material/MenuItem';
 import Button from '@mui/material/Button';
 import Link from '@mui/material/Link';
 import Alert from "@mui/material/Alert";
-
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import { styled } from '@mui/material/styles';
+import SaveOutlinedIcon from '@mui/icons-material/SaveOutlined';
 
 const defaultTheme = createTheme();
+
+const VisuallyHiddenInput = styled('input')({
+	clip: 'rect(0 0 0 0)',
+	clipPath: 'inset(50%)',
+	height: 1,
+	overflow: 'hidden',
+	position: 'absolute',
+	bottom: 0,
+	left: 0,
+	whiteSpace: 'nowrap',
+	width: 1,
+});
+
 
 const styles = {
 	containerTitle: {
@@ -50,6 +68,7 @@ export const NewProducts = () => {
 	const [message, setMessage] = useState("");
 	const [severity, setSeverity] = useState("");
 	const [isSubmitting, setIsSubmitting] = useState(false);
+	const [file, setFile] = useState();
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
@@ -103,7 +122,11 @@ export const NewProducts = () => {
 
 	}
 
+	const upload = () => {
+		
+	}
 
+	
 	return (
 		<ThemeProvider theme={defaultTheme}>
 			<Container component="main" maxWidth="xs">
@@ -116,7 +139,17 @@ export const NewProducts = () => {
 							<TextField margin="normal" required fullWidth id="code" label="Code" name="code" autoComplete="code" autoFocus style={{ margin: 10, width: 150 }} />
 							<TextField margin="normal" required fullWidth id="title" label="Title" name="title" autoComplete="title" style={{ margin: 10, width: 500 }} />
 						</Stack>
-						<TextField margin="normal" required fullWidth multiline rows={5} id="description" label="Description" name="description" autoComplete="description" style={{ margin: 10, width: 670 }} />
+						<Stack spacing={1} direction='row'>
+							<TextField margin="normal" required fullWidth multiline rows={5} id="description" label="Description" name="description" autoComplete="description" style={{ margin: 10, width: 669 }} />
+						</Stack>
+						{/* <Stack spacing={1} direction='row'> */}
+							{/* <Stack spacing={1} direction='col'> */}
+								{/* <img src="https://www.example.com/images/dinosaur.jpg" width="280" height="130" /> */}
+								{/* <input type="file" onChange={(e) => setFile(e.target.files[0])} /> */}
+								{/* <button type="button" onClick={upload}>Upload</button> */}
+								{/* <Button component="label" variant="contained" startIcon={<CloudUploadIcon />}>Upload File<VisuallyHiddenInput type="file" /></Button> */}
+							{/* </Stack> */}
+						{/* </Stack> */}
 						<Stack spacing={1} direction='row'>
 							<TextField id="category" name="category" select label="Category" defaultValue="jewelery" helperText="Please select a category" style={{ margin: 10, width: 300 }} >
 								{categories.map((option) => (
@@ -128,8 +161,9 @@ export const NewProducts = () => {
 							<TextField type="number" margin="normal" required fullWidth id="price" label="Price" name="price" autoComplete="price" style={{ margin: 10, width: 170 }} />
 							<TextField type="number" margin="normal" required fullWidth id="stock" label="Stock" name="stock" autoComplete="stock" style={{ margin: 10, width: 160 }} />
 						</Stack>
-						<Stack spacing={50} direction='row'>
-							<Button type="submit" variant="contained" disabled={Boolean(isSubmitting)} sx={{ mt: 3, mb: 2, margin: 10 }}>Create</Button>
+						<Stack spacing={10} direction='row'>
+							<Button type="submit" variant="contained" startIcon={<SaveOutlinedIcon />} disabled={Boolean(isSubmitting)} sx={{ mt: 3, mb: 2, margin: 10 }}>Create</Button>
+							<Button type="file" component="label" variant="contained" color="secondary" startIcon={<CloudUploadIcon />}>Upload Image<VisuallyHiddenInput /></Button>
 							<Link href="/management">{"Return to list product"}</Link>
 						</Stack>
 					</Box>

@@ -19,7 +19,8 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 
 // const TableActionsComponent = ({ product, handleOpen, handleClose }) => {
 const TableActionsComponent = ( props ) => {
-	const { product, handleOpen, handleClose } = props;
+	const { code, handleOpen, handleClose } = props;
+	console.log("CODE", code)
 
 	return (
 		<StyledTableCell width="10%" align="right">

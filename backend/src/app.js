@@ -1,6 +1,8 @@
 import 'dotenv/config';
 import express, { json } from "express";
-// import multer from 'multer';
+import multer from 'multer';
+import path from 'path';
+import { __dirname } from './path.js'
 import mongoose from "mongoose";
 import cookieParser from 'cookie-parser';
 import passport from 'passport';
@@ -23,7 +25,7 @@ const app = express();
 
 const specs = swaggerJSDoc(swaggerOptions);
 
-const whiteList = ['http://192.168.80.10:5173']
+const whiteList = ['http://192.168.80.13:5173']
 // const whiteList = ['http://localhost:5173/']
 // const whiteList = ['http://127.0.0.1:5173/']
 
@@ -44,7 +46,7 @@ const corsOptions = {
 //         cb(null, 'src/public/img') // null hace referencia a q no envía errores
 //     },
 //     filename: (req, file, cb) => {
-//         cb(null, `${Date.now()}${file.originalname}`)
+//         cb(null, `${Date.now()}-${file.originalname}`)
 //     }
 // });
 
@@ -68,6 +70,7 @@ app.use(session({
 app.use(express.urlencoded({ extended: true }));
 app.use(cors(corsOptions));
 // app.use(cors());
+
 // const upload = multer({ storage: storage });
 
 //inicializamos la estrategia
@@ -106,6 +109,14 @@ app.get('/testArtillery', (req, res) => {
 app.listen(PORT, () => {
     console.log(`server on PORT ${PORT}`)
 })
+
+// Carga de archivos estáticos
+// app.use(express.static('public'));
+// console.log(`${__dirname}/public/img`)
+// console.log(path.join(__dirname, 'public/img'))
+
+// app.use('/public/img', express.static(`${__dirname}/public/img`));
+// app.use('/public/img', express.static(path.join(__dirname, 'public/img')));
 
 // Ruta de multer
 // app.post('/upload', upload.single('product'), (req, res) => { // key: 'product'

@@ -13,9 +13,8 @@ import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
 import MenuItem from '@mui/material/MenuItem';
 import Button from '@mui/material/Button';
-import Link from '@mui/material/Link';
 import Alert from "@mui/material/Alert";
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+// import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { styled } from '@mui/material/styles';
 import SaveOutlinedIcon from '@mui/icons-material/SaveOutlined';
 
@@ -31,6 +30,8 @@ const VisuallyHiddenInput = styled('input')({
 	left: 0,
 	whiteSpace: 'nowrap',
 	width: 1,
+	id: 'upload',
+	name: 'upload',
 });
 
 
@@ -68,7 +69,7 @@ export const NewProducts = () => {
 	const [message, setMessage] = useState("");
 	const [severity, setSeverity] = useState("");
 	const [isSubmitting, setIsSubmitting] = useState(false);
-	const [file, setFile] = useState();
+	// const [file, setFile] = useState();
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
@@ -122,9 +123,9 @@ export const NewProducts = () => {
 
 	}
 
-	const upload = () => {
+	// const upload = () => {
 		
-	}
+	// }
 
 	
 	return (
@@ -161,10 +162,11 @@ export const NewProducts = () => {
 							<TextField type="number" margin="normal" required fullWidth id="price" label="Price" name="price" autoComplete="price" style={{ margin: 10, width: 170 }} />
 							<TextField type="number" margin="normal" required fullWidth id="stock" label="Stock" name="stock" autoComplete="stock" style={{ margin: 10, width: 160 }} />
 						</Stack>
-						<Stack spacing={10} direction='row'>
-							<Button type="submit" variant="contained" startIcon={<SaveOutlinedIcon />} disabled={Boolean(isSubmitting)} sx={{ mt: 3, mb: 2, margin: 10 }}>Create</Button>
-							<Button type="file" component="label" variant="contained" color="secondary" startIcon={<CloudUploadIcon />}>Upload Image<VisuallyHiddenInput /></Button>
-							<Link href="/management">{"Return to list product"}</Link>
+						<Stack spacing={1} direction='row'>
+							<Button type="submit" variant="contained" startIcon={<SaveOutlinedIcon />} disabled={Boolean(isSubmitting)} sx={{ mt: 3, mb: 2, margin: 10 }}>Save</Button>
+							{/* <Button component="label" name="photos" id="photos" variant="contained" color="secondary" onChange={(e) => setFile(e.target.files[0])} startIcon={<CloudUploadIcon />}>Select Image<VisuallyHiddenInput type="file" /></Button> */}
+							<Button variant="contained" color="secondary" href="/management">Return to list</Button>
+							{/* <input type="file" name="thumbnail" id="thumbnail" style={{height: 22}} onChange={(e) => setFile(e.target.files[0])} /> */}
 						</Stack>
 					</Box>
 				</Box>

@@ -37,6 +37,10 @@ import Alert from "@mui/material/Alert";
 import Tooltip from '@mui/material/Tooltip';
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import DeleteOutlineOutlinedIcon from '@mui/icons-material/DeleteOutlineOutlined';
+import AddAPhotoOutlinedIcon from '@mui/icons-material/AddAPhotoOutlined';
+import CloudUploadOutlinedIcon from '@mui/icons-material/CloudUploadOutlined';
+import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
+import ChangeCircleOutlinedIcon from '@mui/icons-material/ChangeCircleOutlined';
 
 
 const defaultTheme = createTheme();
@@ -77,6 +81,19 @@ const styleDelete = {
 	p: 4,
 };
 
+const stylePhoto = {
+	position: 'absolute',
+	top: '50%',
+	left: '50%',
+	transform: 'translate(-50%, -50%)',
+	width: 500,
+	height: 250,
+	bgcolor: 'background.paper',
+	border: '2px solid #000',
+	boxShadow: 24,
+	p: 4,
+};
+
 const categories = [
 	{
 		value: "men's clothing",
@@ -104,13 +121,14 @@ const ManagementProductPage = () => {
 	// const [prod, setProd] = useState([]);
 	const [openEdit, setOpenEdit] = useState(false);
 	const [openDelete, setOpenDelete] = useState(false);
+	const [openChangePhoto, setOpenChangePhoto] = useState(false);
 	const formRef = useRef(null);
 	const [showMessage, setShowMessage] = useState(false);
 	const [message, setMessage] = useState("");
 	const [severity, setSeverity] = useState("");
 	const [editedProd, setEditedProd] = useState({_id: '', code: '', title: '', description: '', price: 0, stock: 0, category: '', status: true, thumbnail: ''});
 	const [deletedProd, setDeletedProd] = useState({_id: '', code: '', title: '', description: '', price: 0, stock: 0, category: '', status: true, thumbnail: ''});
-	const [file, setFile] = useState();
+	const [selectedFile, setSelectedFile] = useState();
 
 	// Paginación
 	const [page, setPage] = useState(0);
@@ -128,10 +146,16 @@ const ManagementProductPage = () => {
 		setOpenDelete(true);
 	};
 
+	const handleUploadPhoto = (prod) => {
+		setEditedProd(prod);
+		setOpenChangePhoto(true);
+	};
+
 	const handleClose = () => {
 		setEditedProd({_id: '', code: '', title: '', description: '', price: 0, stock: 0, category: '', status: true, thumbnail: ''});
 		setOpenEdit(false);
 		setOpenDelete(false);
+		setOpenChangePhoto(false);
 	};
 
 	const handleInputChange = (e) => {
@@ -192,10 +216,6 @@ const ManagementProductPage = () => {
 		getProducts();
 
 	}, []);
-
-	function ccyFormat(num) {
-		return `${num.toFixed(2)}`;
-	}
 
 	const StyledTableCell = styled(TableCell)(({ theme }) => ({
 		[`&.${tableCellClasses.head}`]: {
@@ -294,6 +314,60 @@ const ManagementProductPage = () => {
 
 		} catch (error) {
 			console.log('Error al eliminar producto', error);
+		}
+	}
+
+	const uploadPhoto = async () => {
+		try {
+			const idProd = editedProd._id;
+			const formData = new FormData();
+			formData.append('idProd', idProd); // Adiciono el id de producto
+			formData.append('thumbnail', selectedFile); // Adiciono la imagen
+
+			const response = await fetch(`http://localhost:4000/api/products/upload`, {
+				method: 'POST',
+				credentials: 'include',
+				body: formData
+			});
+
+			if (response.status == 200) {
+				console.log("Imagen de producto cargada con éxito");
+				setShowMessage(true);
+				setMessage("Imagen de producto cargada exitosamente");
+				setSeverity("success");
+
+				editedProd.thumbnail = selectedFile.name; // Actualizo la imagen en el listado
+
+				setTimeout(() => {
+					setShowMessage(false);
+					handleClose();
+				}, 3000);
+
+			} else if (response.status === 401) {
+				const datos = await response.json();
+				console.error('Error al intentar cargar imagen', datos);
+				setShowMessage(true);
+				setMessage("Acceso no autorizado");
+				setSeverity("error");
+
+				setTimeout(() => {
+					setShowMessage(false);
+				}, 3000);
+
+			} else {
+				console.log(response);
+				setShowMessage(true);
+				setMessage("Debe seleccionar la imagen");
+				setSeverity("error");
+
+				setTimeout(() => {
+					setShowMessage(false);
+				}, 3000);
+			}
+
+
+		} catch (error) {
+			console.log('Error al cargar imagen', error);
 		}
 	}
 
@@ -399,8 +473,8 @@ const ManagementProductPage = () => {
 											style={{ margin: 10, width: 160 }} value={editedProd.stock || 0} onChange={ handleInputChange } />
 									</Stack>
 									<Stack spacing={2} direction='row'>
-										<Button type="submit" variant="contained" sx={{ mt: 3, mb: 2, margin: 10 }}>Update</Button>
-										<Button variant="contained" sx={{ mt: 3, mb: 2, margin: 10 }} color="secondary" onClick={handleClose}>Cancel</Button>
+										<Button type="submit" variant="contained" startIcon={<ChangeCircleOutlinedIcon />} sx={{ mt: 3, mb: 2, margin: 10 }}>Update</Button>
+										<Button variant="contained" startIcon={<CancelOutlinedIcon />} sx={{ mt: 3, mb: 2, margin: 10 }} color="secondary" onClick={handleClose}>Cancel</Button>
 									</Stack>
 								</Box>
 							</Box>
@@ -420,8 +494,30 @@ const ManagementProductPage = () => {
 									<Typography component="h6" variant="h6">Product code {deletedProd.code}: {deletedProd.title}</Typography><br></br>
 									<Typography component="h6" variant="h6">Do you really want to delete this record?</Typography>
 									<Stack spacing={2} direction='row'>
-										<Button variant="contained" sx={{ mt: 3, mb: 2, margin: 10 }} onClick={saveDelete}>Delete</Button>
-										<Button variant="contained" sx={{ mt: 3, mb: 2, margin: 10 }} color="secondary" onClick={handleClose}>Cancel</Button>
+										<Button variant="contained" startIcon={<DeleteOutlineOutlinedIcon />} sx={{ mt: 3, mb: 2, margin: 10 }} onClick={saveDelete}>Delete</Button>
+										<Button variant="contained" startIcon={<CancelOutlinedIcon />} sx={{ mt: 3, mb: 2, margin: 10 }} color="secondary" onClick={handleClose}>Cancel</Button>
+									</Stack>
+								</Box>
+							</Box>
+							<Stack sx={{ width: "100%" }} spacing={2}>
+								{showMessage && <Alert severity={severity}>{message}</Alert>}
+							</Stack>
+						</Box>
+					</Modal>
+
+					{/* Modal upload foto */}
+					<Modal open={openChangePhoto} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
+						<Box sx={stylePhoto}>							
+							<Box sx={{ marginTop: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', }}>
+								<Typography component="h1" variant="h5">Upload Photo</Typography>
+
+								<Box sx={{ margin: 2, bgcolor: '#f8edeb', mt: 1 }} >
+									<Typography component="h6" variant="h6">Product code {editedProd.code}: {editedProd.title}</Typography><br></br>
+									<input type="file" name="thumbnail" id="thumbnail" accept="image/*" style={{height: 35}} onChange={(e) => setSelectedFile(e.target.files[0])} />
+									
+									<Stack spacing={2} direction='row'>
+										<Button variant="contained" startIcon={<CloudUploadOutlinedIcon />} sx={{ mt: 3, mb: 2, margin: 10 }} onClick={uploadPhoto}>Upload</Button>
+										<Button variant="contained" startIcon={<CancelOutlinedIcon />} sx={{ mt: 3, mb: 2, margin: 10 }} color="secondary" onClick={handleClose}>Cancel</Button>
 									</Stack>
 								</Box>
 							</Box>
@@ -462,7 +558,11 @@ const ManagementProductPage = () => {
 												{/* <TableActionsComponent code = { prod.code } handleOpen = { handleOpen } handleClose = { handleClose }/> */}
 												<StyledTableCell width="10%" align="right">
 													<Stack spacing={1} direction='row'>
-														<Tooltip title='Edit' placement='left'>
+														<Tooltip title='Upload Photo' placement='left'>
+															<IconButton size='small' onClick={ () => handleUploadPhoto(prod) }><AddAPhotoOutlinedIcon /></IconButton>
+														</Tooltip>
+														
+														<Tooltip title='Edit' placement='bottom-end'>
 															<IconButton size='small' onClick={ () => handleEdit(prod) }><EditOutlinedIcon /></IconButton>
 														</Tooltip>
 

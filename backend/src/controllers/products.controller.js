@@ -120,20 +120,20 @@ const deleteProduct = async (req, res) => {
 const uploadImage = async (req, res) => {
 	const productId = req.body.idProd;
     const file = req.file;
-	const filePath = req.file.path; // Si la imagen se subió correctamente, Multer agregará la propiedad 'file' al objeto 'req'
+	const namePhoto = file.filename;
 
 	if (!file || file.length === 0) {
-	    return res.status(400).send('No se cargaron imágenes');
+		return res.status(400).send('No se cargaron imágenes');
 	}
 
 	try {	
 		const product = await productModel.findById(productId);
-		product.thumbnail = filePath;
+		product.thumbnail = namePhoto;
 
 		await product.save();
 
-		// res.status(200).send('La imagen fue grabada exitosamente');
-		res.status(200).json({ success: true, message: 'La imagen fue grabada exitosamente', filePath });
+		res.status(200).json({ success: true, message: 'La imagen fue grabada exitosamente', namePhoto: namePhoto });
+		console.log("RES", res)
 
 	} catch (error) {
 		console.error('Error al grabar ruta de imagen en la bd:', error);

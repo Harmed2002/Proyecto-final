@@ -8,14 +8,11 @@ const productRouter = Router();
 
 
 productRouter.get('/', productController.getProducts)
-productRouter.get('/management', productController.getProducts)
+productRouter.get('/products-management', productController.getProducts)
 productRouter.get('/:id', productController.getProductById);
 productRouter.get('/category/:idCat', productController.getProductsByCategory);
 productRouter.post('/', passportError('jwt'), authorization('Admin'), productController.postProduct);
-
 productRouter.post('/upload', upload.single('thumbnail'), productController.uploadImage);
-// productRouter.post('/upload', upload.single('thumbnail'), productController.uploadImage);
-
 productRouter.put('/:id', passportError('jwt'), authorization('Admin'), productController.putProduct);
 productRouter.delete('/:id', passportError('jwt'), authorization('Admin'), productController.deleteProduct);
 

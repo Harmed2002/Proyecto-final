@@ -98,7 +98,7 @@ export const NewProducts = () => {
 				setIsSubmitting(true);
 
 				setTimeout(() => {
-					navigate('/management');
+					navigate('/products-management');
 				}, 3000);
 
 			} else if (response.status === 401) {
@@ -165,7 +165,7 @@ export const NewProducts = () => {
 						<Stack spacing={1} direction='row'>
 							<Button type="submit" variant="contained" startIcon={<SaveOutlinedIcon />} disabled={Boolean(isSubmitting)} sx={{ mt: 3, mb: 2, margin: 10 }}>Save</Button>
 							{/* <Button component="label" name="photos" id="photos" variant="contained" color="secondary" onChange={(e) => setFile(e.target.files[0])} startIcon={<CloudUploadIcon />}>Select Image<VisuallyHiddenInput type="file" /></Button> */}
-							<Button variant="contained" color="secondary" href="/management">Return to list</Button>
+							<Button variant="contained" color="secondary" href="/products-management">Return to list</Button>
 							{/* <input type="file" name="thumbnail" id="thumbnail" style={{height: 22}} onChange={(e) => setFile(e.target.files[0])} /> */}
 						</Stack>
 					</Box>

@@ -1,6 +1,5 @@
 import 'dotenv/config';
 import express, { json } from "express";
-import multer from 'multer';
 import path from 'path';
 import { __dirname } from './path.js'
 import mongoose from "mongoose";
@@ -40,16 +39,6 @@ const corsOptions = {
     credentials: true
 }
 
-// Configuración de Multer
-// const storage = multer.diskStorage({
-//     destination: (req, file, cb) => {
-//         cb(null, 'src/public/img') // null hace referencia a q no envía errores
-//     },
-//     filename: (req, file, cb) => {
-//         cb(null, `${Date.now()}-${file.originalname}`)
-//     }
-// });
-
 // Middlewares
 app.use(express.json());
 app.use(cookieParser(process.env.SIGNED_COOKIE)) // La cookie esta firmada
@@ -70,8 +59,6 @@ app.use(session({
 app.use(express.urlencoded({ extended: true }));
 app.use(cors(corsOptions));
 // app.use(cors());
-
-// const upload = multer({ storage: storage });
 
 //inicializamos la estrategia
 initializePassport();
@@ -111,25 +98,4 @@ app.listen(PORT, () => {
 })
 
 // Carga de archivos estáticos
-// app.use(express.static('public'));
-// console.log(`${__dirname}/public/img`)
-// console.log(path.join(__dirname, 'public/img'))
-
-// app.use('/public/img', express.static(`${__dirname}/public/img`));
-// app.use('/public/img', express.static(path.join(__dirname, 'public/img')));
-
-// Ruta de multer
-// app.post('/upload', upload.single('product'), (req, res) => { // key: 'product'
-//     console.log(req.file)
-//     console.log(req.body)
-
-//     res.status(200).send("Imagen cargada");
-// })
-
-
-
-
-
-
-
-
+app.use('/static', express.static(path.join(__dirname, 'public/upload')));

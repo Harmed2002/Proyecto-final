@@ -5,7 +5,7 @@ import { useState, useEffect, useRef } from 'react';
 import Spinner from '../../components/Spinner/Spinner';
 import { useNavigate, Link } from 'react-router-dom';
 import { getCookiesByName } from "../../utils/formsUtils.js";
-import image from '../../assets/images/fake-img.png';
+// import image from '../../assets/images/fake-img.png';
 // MUI
 import { createTheme, ThemeProvider, styled, useTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -41,6 +41,7 @@ import AddAPhotoOutlinedIcon from '@mui/icons-material/AddAPhotoOutlined';
 import CloudUploadOutlinedIcon from '@mui/icons-material/CloudUploadOutlined';
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 import ChangeCircleOutlinedIcon from '@mui/icons-material/ChangeCircleOutlined';
+import Image from '@mui/icons-material/Image.js'
 
 
 const defaultTheme = createTheme();
@@ -331,13 +332,16 @@ const ManagementProductPage = () => {
 			});
 
 			if (response.status == 200) {
+				// Obtengo el nombre modificado por Multer de la foto cargada
+				const data = await response.json();
+				const { namePhoto } = data;
+				editedProd.thumbnail = namePhoto; // Actualizo la imagen en el listado
+				
 				console.log("Imagen de producto cargada con éxito");
 				setShowMessage(true);
 				setMessage("Imagen de producto cargada exitosamente");
 				setSeverity("success");
-
-				editedProd.thumbnail = selectedFile.name; // Actualizo la imagen en el listado
-
+				
 				setTimeout(() => {
 					setShowMessage(false);
 					handleClose();
@@ -551,7 +555,12 @@ const ManagementProductPage = () => {
 												<StyledTableCell width="5%">{prod.code}</StyledTableCell>
 												<StyledTableCell width="40%">{prod.title}</StyledTableCell>
 												<StyledTableCell width="15%">{prod.category}</StyledTableCell>
-												<StyledTableCell width="10%">{prod.thumbnail}</StyledTableCell>
+												{/* <StyledTableCell width="10%">{prod.thumbnail}</StyledTableCell> */}
+												<StyledTableCell width="10%">
+													{prod.thumbnail && (
+														<img src={`http://localhost:4000/static/${prod.thumbnail}`} width="30" height="30"/>
+													)}
+												</StyledTableCell>
 												<StyledTableCell width="5%" align="right">{prod.stock}</StyledTableCell>
 												<StyledTableCell width="5%" align="right">{prod.price.toFixed(2)}</StyledTableCell>
 												<StyledTableCell width="5%" align="right">{prod.status}</StyledTableCell>

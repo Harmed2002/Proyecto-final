@@ -39,7 +39,7 @@ const App = () => {
 					<Route path="/detail/:id" element={<DetailPage />} />
 					<Route path="/category/:category" element={<CategoryPage />} />
 					<Route path="/shop" element={<ShopPage />} />
-					<Route path="/management" element={<ManagementProductPage />} />
+					<Route path="/products-management" element={<ManagementProductPage />} />
 				</Routes>
 			</BrowserRouter>
 		</SalesProvider>

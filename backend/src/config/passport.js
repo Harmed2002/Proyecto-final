@@ -82,7 +82,7 @@ const initializePassport = () => {
                     return done(null, false);
                 }
 
-                // S existe valido la clave
+                // Si existe valido la clave
                 if (validatePassword(password, user.password)) {
                     return done(null, user);
 
@@ -125,12 +125,12 @@ const initializePassport = () => {
         }
     }))
 
-    //inicializar la session de user
+    // Inicializar la session de user
     passport.serializeUser((user, done) => {
         done(null, user._id);
     })
 
-    //eliminar la session
+    // Eliminar la session
     passport.deserializeUser(async (id, done) => {
         const user = await userModel.findById(id);
         done(null, user);

@@ -32,7 +32,11 @@ const userSchema = new Schema({
     },
     rol:{
         type: String,
-        default:'user'
+        default:'User'
+    },
+    last_connection: {
+        type: Date,
+        default: Date.now
     }
 
 })

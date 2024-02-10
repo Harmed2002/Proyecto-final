@@ -1,4 +1,5 @@
 import { generateToken } from "../utils/jwt.js";
+import { userModel } from "../models/users.models.js";
 
 
 export const login = async (req, res) => {
@@ -14,6 +15,17 @@ export const login = async (req, res) => {
 		//     maxAge: 4320000 //12 hs en mili segundos
 		// });
 		// res.status(200).send({ payload: req.user });
+
+		// Actualizo la fecha de última conexión del usr en la BD
+		
+		const id = req.user._id;
+		const last_connection = Date.now();
+		
+		// console.log("id", id)
+		// console.log("last_connection", last_connection)
+		
+		const respuesta = await userModel.findByIdAndUpdate(id, { last_connection });
+
 		res.status(200).send({ token });
 
 	} catch (error) {

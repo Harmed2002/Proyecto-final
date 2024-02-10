@@ -20,7 +20,8 @@ import HomePage from "./pages/HomePage/HomePage";
 import DetailPage from "./pages/DetailPage/DetailPage";
 import CategoryPage from "./pages/CategoryPage/CategoryPage";
 import ShopPage from './pages/ShopPage/ShopPage';
-import ManagementProductPage from './pages/Management/ManagementProductPage';
+import ManagementProductPage from './pages/ManagementProductPage/ManagementProductPage';
+import UserListPage from './pages/UserListPage/UserListPage';
 
 
 const App = () => {
@@ -40,6 +41,7 @@ const App = () => {
 					<Route path="/category/:category" element={<CategoryPage />} />
 					<Route path="/shop" element={<ShopPage />} />
 					<Route path="/products-management" element={<ManagementProductPage />} />
+					<Route path='/users-management' element={<UserListPage />} />
 				</Routes>
 			</BrowserRouter>
 		</SalesProvider>

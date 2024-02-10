@@ -67,7 +67,7 @@ const NavBar = () => {
 				{/* <Link to="/management">Management</Link> */}
 				<li className="dropdown-li">Management
 					<ul className="dropdown">
-						<Link to="/users">Users</Link><br/><br/>
+						<Link to="/users-management">Users</Link><br/><br/>
 						<Link to="/products-management">Products</Link>
 					</ul>
 				</li>

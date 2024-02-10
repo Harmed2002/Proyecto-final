@@ -2,7 +2,7 @@
 /* eslint-disable no-unused-vars */
 
 import { useState, useEffect, useRef } from 'react';
-import Spinner from '../../components/Spinner/Spinner';
+import Spinner from '../../components/Spinner/Spinner.jsx';
 import { useNavigate, Link } from 'react-router-dom';
 import { getCookiesByName } from "../../utils/formsUtils.js";
 // import image from '../../assets/images/fake-img.png';
@@ -200,7 +200,7 @@ const ManagementProductPage = () => {
 				} else if (response.status === 401) {
 					const datos = await response.json()
 					console.error('Error al acceder a productos, debes iniciar sessión', datos);
-					navigate('/')
+					navigate('/login')
 
 				} else {
 					const data = await response.json();

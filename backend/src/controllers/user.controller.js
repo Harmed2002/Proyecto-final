@@ -57,14 +57,15 @@ export const putUser = async (req, res) => {
 
 export const deleteUser = async (req, res) => {
 	try {
-		const { id } = req.params
+		const { id } = req.params;
 		const user = await userModel.findByIdAndDelete(id);
+
 		if (user) {
 			res.status(200).send({ respuesta: 'ok', mensaje: 'usuario borrado' });
-		} else {
-			res.status(404).send({ respuesta: 'error', mensaje: 'usuario no encontado, error al eliminar' });
-		}
 
+		} else {
+			res.status(404).send({ respuesta: 'error', mensaje: 'usuario no encontrado, error al eliminar' });
+		}
 
 	} catch (error) {
 		res.status(400).send({ respuesta: "error", mensaje: error });

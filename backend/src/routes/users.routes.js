@@ -7,9 +7,8 @@ import { getUser, getUsers, putUser, deleteUser } from "../controllers/user.cont
 const userRouter = Router();
 
 userRouter.get('/', passportError('jwt'), authorization('Admin'), getUsers);
-// userRouter.get('/', getUsers);
-userRouter.get('/:id', getUser)
+userRouter.get('/:id', passportError('jwt'), authorization('Admin'), getUser)
 userRouter.put('/:id', putUser)
-userRouter.delete('/:id', deleteUser)
+userRouter.delete('/:id', passportError('jwt'), authorization('Admin'), deleteUser)
 
 export default userRouter;

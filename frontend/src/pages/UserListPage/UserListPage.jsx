@@ -77,8 +77,7 @@ const UserListPage = () => {
 	const [showMessage, setShowMessage] = useState(false);
 	const [message, setMessage] = useState("");
 	const [severity, setSeverity] = useState("");
-	const [deletedProd, setDeletedProd] = useState({_id: '', code: '', title: '', description: '', price: 0, stock: 0, category: '', status: true, thumbnail: ''});
-	const [selectedFile, setSelectedFile] = useState();
+	const [selectedUser, setSelectedUser] = useState({ _id: '', code: '', title: '', description: '', price: 0, stock: 0, category: '', status: true, thumbnail: '' });
 
 	// Paginación
 	const [page, setPage] = useState(0);
@@ -86,8 +85,8 @@ const UserListPage = () => {
 
 	const token = getCookiesByName('jwtCookie');
 
-	const handleDelete = (prod) => {
-		setDeletedProd(prod);
+	const handleDelete = (usr) => {
+		setSelectedUser(usr);
 		setOpenDelete(true);
 	};
 
@@ -96,7 +95,7 @@ const UserListPage = () => {
 	};
 
 	// Avoid a layout jump when reaching the last page with empty rows.
-	// const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - products.length) : 0;
+	// const emptyRows = page > 0 ? Math.max(0, (1 + page) * rowsPerPage - users.length) : 0;
 
 	const handleChangePage = (event, newPage) => {
 		setPage(newPage);
@@ -116,9 +115,9 @@ const UserListPage = () => {
 				// Obtengo todos los usuarios
 				const response = await fetch('http://localhost:4000/api/users', {
 					method: 'GET',
-                    credentials: 'include',
+					credentials: 'include',
 					headers: {
-                        'Authorization': `${token}`,
+						'Authorization': `${token}`,
 						'Content-Type': 'application/json'
 					},
 				})
@@ -213,40 +212,44 @@ const UserListPage = () => {
 		rowsPerPage: PropTypes.number.isRequired,
 	};
 
-	// const saveDelete = async () => {
-	// 	try {
-	// 		// console.log(products);
-	// 		const idToDelete = deletedProd._id;
+	const deleteUser = async () => {
+		try {
+			const idToDelete = selectedUser._id;
+			// console.log("idToDelete", idToDelete);
 
-	// 		const response = await fetch(`http://localhost:4000/api/products/${idToDelete}`, {
-	// 			method: 'DELETE',
-	// 			credentials: 'include',
-	// 			headers: {
-	// 				'Authorization': `${token}`,
-	// 				'Content-Type': 'application/json'
-	// 			},
-	// 			// body: JSON.stringify(deletedProd)
-	// 		});
+			const response = await fetch(`http://localhost:4000/api/users/${idToDelete}`, {
+				method: 'DELETE',
+				credentials: 'include',
+				headers: {
+					'Authorization': `${token}`,
+					'Content-Type': 'application/json'
+				},
+			});
 
-	// 		if (response.status == 201) {
-	// 			console.log("Producto eliminado con éxito");
-	// 			setShowMessage(true);
-	// 			setMessage("Producto eliminado exitosamente");
-	// 			setSeverity("success");
+			if (response.status == 200) {
+				console.log("Usuario eliminado con éxito");
+				setShowMessage(true);
+				setMessage("Usuario eliminado exitosamente");
+				setSeverity("success");
 
-	// 			// Borro el registro del array de productos
-	// 			const newArrayData = products.filter(item => item._id !== idToDelete);
-	// 			setProducts(newArrayData);
+				// Borro el registro del array de usuarios
+				const newArrayData = users.filter(item => item._id !== idToDelete);
+				setUsers(newArrayData);
 
-	// 			setTimeout(() => {
-	// 				handleClose();
-	// 			}, 3000);
-	// 		}
+				setTimeout(() => {
+					handleClose();
+				}, 3000);
+			}
 
-	// 	} catch (error) {
-	// 		console.log('Error al eliminar producto', error);
-	// 	}
-	// }
+		} catch (error) {
+			console.log('Error al eliminar usuario', error);
+		}
+	}
+
+	// En formato AAAA-MM-DDTHH:MM:SS
+	const MinutesBetweenDates = (initialDate, finalDate) => {
+		return (new Date(finalDate).getTime() - new Date(initialDate).getTime()) / 60000;
+	}
 
 
 	return (
@@ -260,16 +263,17 @@ const UserListPage = () => {
 
 				<div>
 					{/* Modal de eliminación */}
-					{/* <Modal open={openDelete} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
-						<Box sx={styleDelete}>							
+					<Modal open={openDelete} onClose={handleClose} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description">
+						<Box sx={styleDelete}>
 							<Box sx={{ marginTop: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', }}>
-								<Typography component="h1" variant="h5">Delete Product</Typography>
+								<Typography component="h1" variant="h5">Delete User</Typography>
 
 								<Box sx={{ margin: 2, bgcolor: '#f8edeb', mt: 1 }} >
-									<Typography component="h6" variant="h6">Product code {deletedProd.code}: {deletedProd.title}</Typography><br></br>
-									<Typography component="h6" variant="h6">Do you really want to delete this record?</Typography>
+									<Typography component="h6" variant="h6">User email: {selectedUser.email}</Typography>
+									<Typography component="h6" variant="h6">This user is more than 30 minutes old since last login</Typography><br></br>
+									<Typography component="h6" variant="h6">Do you really want to delete this user?</Typography>
 									<Stack spacing={2} direction='row'>
-										<Button variant="contained" startIcon={<DeleteOutlineOutlinedIcon />} sx={{ mt: 3, mb: 2, margin: 10 }} onClick={saveDelete}>Delete</Button>
+										<Button variant="contained" startIcon={<DeleteOutlineOutlinedIcon />} sx={{ mt: 3, mb: 2, margin: 10 }} onClick={deleteUser}>Delete</Button>
 										<Button variant="contained" startIcon={<CancelOutlinedIcon />} sx={{ mt: 3, mb: 2, margin: 10 }} color="secondary" onClick={handleClose}>Cancel</Button>
 									</Stack>
 								</Box>
@@ -278,7 +282,7 @@ const UserListPage = () => {
 								{showMessage && <Alert severity={severity}>{message}</Alert>}
 							</Stack>
 						</Box>
-					</Modal> */}
+					</Modal>
 				</div>
 
 				<TableContainer component={Paper}>
@@ -304,15 +308,16 @@ const UserListPage = () => {
 												<StyledTableCell width="20%">{usr.email}</StyledTableCell>
 												<StyledTableCell width="10%">{usr.rol}</StyledTableCell>
 												<StyledTableCell width="25%">{usr.last_connection}</StyledTableCell>
-												{/* <StyledTableCell width="25%">{new Date(usr.last_connection).toISOString().split('T')[0]}</StyledTableCell> */}
-												<StyledTableCell width="25%">{Date.now() }</StyledTableCell>
-												{/* <StyledTableCell width="10%" align="right">
-													<Stack spacing={1} direction='row'>
-														<Tooltip title='Delete' placement='right'>
-															<IconButton size='small' onClick={ () => handleDelete(usr) }><DeleteOutlineOutlinedIcon /></IconButton>
-														</Tooltip>
-													</Stack>
-												</StyledTableCell> */}
+												{/* <StyledTableCell width="25%">{ new Date(usr.last_connection).toISOString().split('T')[0] }</StyledTableCell> */}
+												<StyledTableCell width="10%" align="right">
+													{MinutesBetweenDates(usr.last_connection, Date.now()) > 30 && (
+														<Stack spacing={1} direction='row'>
+															<Tooltip title='Delete User' placement='right'>
+																<IconButton size='small' onClick={() => handleDelete(usr)}><DeleteOutlineOutlinedIcon /></IconButton>
+															</Tooltip>
+														</Stack>)
+													}
+												</StyledTableCell>
 											</StyledTableRow>
 										))}
 										{/* {emptyRows > 0 && (
@@ -337,7 +342,7 @@ const UserListPage = () => {
 										</TableRow>
 									</TableFooter> */}
 								</Table>
-							: <Typography>There are no products</Typography>
+								: <Typography>There are no products</Typography>
 						}
 					</Box>
 				</TableContainer>

@@ -31,7 +31,7 @@ const Logout = () => {
                 // console.log("datos", data);
                 
                 // Limpia el token del almacenamiento local
-                localStorage.removeItem('jwtCookie');
+                localStorage.removeItem('userEmail');
                 // Elimina la cookie del lado del cliente (se le cambia la fecha de expiración)
                 document.cookie = "jwtCookie=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
                 // Redirecciona a la página de login

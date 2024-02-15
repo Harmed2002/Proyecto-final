@@ -78,6 +78,7 @@ const UserListPage = () => {
 	const [message, setMessage] = useState("");
 	const [severity, setSeverity] = useState("");
 	const [selectedUser, setSelectedUser] = useState({ _id: '', code: '', title: '', description: '', price: 0, stock: 0, category: '', status: true, thumbnail: '' });
+	const [curUserEmail, setCurUserEmail] = useState("");
 
 	// Paginación
 	const [page, setPage] = useState(0);
@@ -110,6 +111,8 @@ const UserListPage = () => {
 	useEffect(() => {
 		const getUsers = async () => {
 			setIsLoading(true);
+			// Obtengo el email del usuario conectado para no permitir que el mismo usr se borre
+			setCurUserEmail(localStorage.getItem("userEmail"));
 
 			try {
 				// Obtengo todos los usuarios
@@ -310,7 +313,7 @@ const UserListPage = () => {
 												<StyledTableCell width="25%">{usr.last_connection}</StyledTableCell>
 												{/* <StyledTableCell width="25%">{ new Date(usr.last_connection).toISOString().split('T')[0] }</StyledTableCell> */}
 												<StyledTableCell width="10%" align="right">
-													{MinutesBetweenDates(usr.last_connection, Date.now()) > 30 && (
+													{(curUserEmail != usr.email) && MinutesBetweenDates(usr.last_connection, Date.now()) > 30 && (
 														<Stack spacing={1} direction='row'>
 															<Tooltip title='Delete User' placement='right'>
 																<IconButton size='small' onClick={() => handleDelete(usr)}><DeleteOutlineOutlinedIcon /></IconButton>
@@ -342,7 +345,7 @@ const UserListPage = () => {
 										</TableRow>
 									</TableFooter> */}
 								</Table>
-								: <Typography>There are no products</Typography>
+							: <Typography>There are no users</Typography>
 						}
 					</Box>
 				</TableContainer>

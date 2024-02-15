@@ -28,8 +28,8 @@ const Login = () => {
 		
 		try {
 			setIsLoading(true);
-			const datForm = new FormData(formRef.current); // Tranformo un HTML en un objet iterator
-			const data = Object.fromEntries(datForm);
+			const dataForm = new FormData(formRef.current); // Tranformo un HTML en un objet iterator
+			const data = Object.fromEntries(dataForm);
 			
 			const response = await fetch('http://localhost:4000/api/sessions/login', {
 				method: 'POST',
@@ -47,6 +47,8 @@ const Login = () => {
 				// document.cookie = `jwtCookie=${datos.token}; SameSite=None; Secure; expires=${new Date(Date.now() + 1 * 24 * 60 * 60 * 1000).toUTCString()}; path=/;`;
 				document.cookie = `jwtCookie=${datos.token}; SameSite=None; expires=${new Date(Date.now() + 1 * 24 * 60 * 60 * 1000).toUTCString()}; path=/;`;
 				// console.log("COOK", datos.token);
+				// Registro los datos del usuario en localStorage
+				localStorage.setItem('userEmail', data.email);
 				navigate('/products');
 			
 			} else if (response.status === 401) {

@@ -1,4 +1,5 @@
 import { userModel } from "../models/users.models.js";
+import { mailer } from "../config/nodemailer.js"
 
 
 export const getUsers = async (req, res) => {
@@ -60,7 +61,14 @@ export const deleteUser = async (req, res) => {
 		const { id } = req.params;
 		const user = await userModel.findByIdAndDelete(id);
 
+		
 		if (user) {
+			if (user.email) {
+				await mailer.sendMailForDeletedAccount(user.email); // Se envía correo electrónico de notificación al usuario
+	
+				return res.status(200).send({ mensaje: "Usuario eliminado y notificado exitosamente" });
+			}
+			
 			res.status(200).send({ respuesta: 'ok', mensaje: 'usuario borrado' });
 
 		} else {

@@ -40,9 +40,12 @@ const Login = () => {
 			});
 
 			setIsLoading(true);
+
+			console.log("RESP", response.status)
 	
 			if (response.status == 200) {
 				const datos = await response.json();
+				console.log("TOKEN", datos.token)
 				// Creo el token
 				// document.cookie = `jwtCookie=${datos.token}; SameSite=None; Secure; expires=${new Date(Date.now() + 1 * 24 * 60 * 60 * 1000).toUTCString()}; path=/;`;
 				document.cookie = `jwtCookie=${datos.token}; SameSite=None; expires=${new Date(Date.now() + 1 * 24 * 60 * 60 * 1000).toUTCString()}; path=/;`;

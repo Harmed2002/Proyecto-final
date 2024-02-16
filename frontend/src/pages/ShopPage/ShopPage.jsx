@@ -123,48 +123,46 @@ const ShopPage = () => {
 
 	return (
 		<>
-			{/* {(items && items.length > 0) ?  */}
-				{isLoading ? <Spinner/> : null}
-				<div className='containerShop'>
-					{
-						visibleButtons ?
-							<div className='detailsContainer'>
-								<h2>Purchase Details</h2>
-								<PurchaseDetails />
-							</div>
-						: <h2>No items in the shopping cart</h2>
-					}
+			{isLoading ? <Spinner/> : null}
+			<div className='containerShop'>
+				{
+					visibleButtons ?
+						<div className='detailsContainer'>
+							<h2>Purchase Details</h2>
+							<PurchaseDetails />
+						</div>
+					: <h2>No items in the shopping cart</h2>
+				}
 
-					<div className="FormContainer">
-						{
-							visibleButtons ?	
-								<Card sx={{ width: 600, backgroundColor:'white' }}>
-									<CardContent>
-										<Typography variant="h5" color="black">Personal Information</Typography>
-										<hr color="red"></hr>
-										{ token ?
-											<div>
-												<Typography variant="h8" color="black">Name: {userData.first_name} {userData.last_name}</Typography><br></br>
-												<Typography variant="h8" color="black">Email: {userData.email}</Typography><br></br>
-												<Typography variant="h8" color="black">Id. Cart: {userData.cart}</Typography><br></br>
-											</div>
-										:	
-											<Typography variant="h8" color="black">There is no personal information. You must be logged in to complete the purchase</Typography>
-										}
-									</CardContent>
-									<CardActionArea>
-										<CardActions sx={{ backgroundColor:'white' }} >
-											{ token ? null : <Button variant="contained" fullWidth onClick={ () => navigate('/login') } startIcon={<VpnKeyOutlined />}>Login</Button> }
-											{ token ? <Button variant="contained" color="success" fullWidth onClick={ () => savePurchase() } startIcon={<ShoppingCartCheckoutOutlined />}>Finish purchase</Button> : null }
-										</CardActions>
-									</CardActionArea>
-								</Card>
-							: null
-						}
-						{purchaseCode && <MessageSuccess purchaseCode={purchaseCode} />}
-					</div>
+				<div className="FormContainer">
+					{
+						visibleButtons ?	
+							<Card sx={{ width: 600, backgroundColor:'white' }}>
+								<CardContent>
+									<Typography variant="h5" color="black">Personal Information</Typography>
+									<hr color="red"></hr>
+									{ token ?
+										<div>
+											<Typography variant="h8" color="black">Name: {userData.first_name} {userData.last_name}</Typography><br></br>
+											<Typography variant="h8" color="black">Email: {userData.email}</Typography><br></br>
+											<Typography variant="h8" color="black">Id. Cart: {userData.cart}</Typography><br></br>
+										</div>
+									:	
+										<Typography variant="h8" color="black">There is no personal information. You must be logged in to complete the purchase</Typography>
+									}
+								</CardContent>
+								<CardActionArea>
+									<CardActions sx={{ backgroundColor:'white' }} >
+										{ token ? null : <Button variant="contained" fullWidth onClick={ () => navigate('/login') } startIcon={<VpnKeyOutlined />}>Login</Button> }
+										{ token ? <Button variant="contained" color="success" fullWidth onClick={ () => savePurchase() } startIcon={<ShoppingCartCheckoutOutlined />}>Finish purchase</Button> : null }
+									</CardActions>
+								</CardActionArea>
+							</Card>
+						: null
+					}
+					{purchaseCode && <MessageSuccess purchaseCode={purchaseCode} />}
 				</div>
-			{/*  <h3>El Carrito de compras está vacío</h3> } */}
+			</div>
 		</>
 	);
 };

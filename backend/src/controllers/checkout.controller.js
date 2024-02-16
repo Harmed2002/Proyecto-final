@@ -2,6 +2,7 @@ import { ticketModel } from "../models/ticket.models.js";
 import { cartModel } from "../models/carts.models.js";
 import { userModel } from "../models/users.models.js";
 import { productModel } from "../models/products.models.js";
+import { mailer } from "../config/nodemailer.js"
 
 export const createTicket = async (req, res) => {
 	try {
@@ -36,6 +37,13 @@ export const createTicket = async (req, res) => {
 			console.log("ticket", ticket);
 
 			if (ticket) {
+				/* */
+				//Envío el correo al usuario
+				await mailer.sendPurchaseConfirmation(purchaser, ticket._id);
+				if (updatedCart) {
+					return res.status(200).send({ message: "exito" });
+				}
+				/* */
 				res.status(200).send({ ticket });
 
 			} else {

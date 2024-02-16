@@ -1,9 +1,9 @@
-import { Router } from "express";
-import { nodemailerSend } from "../controllers/nodemailer.controller.js";
+// import { Router } from "express";
+// import { nodemailerSend } from "../controllers/nodemailer.controller.js";
 
 
-const nodemailerRouter = Router();
+// const nodemailerRouter = Router();
 
-nodemailerRouter.get('/', nodemailerSend);
+// nodemailerRouter.get('/', nodemailerSend);
 
-export default nodemailerRouter
+// export default nodemailerRouter

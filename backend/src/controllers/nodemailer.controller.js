@@ -1,29 +1,29 @@
-import transporter from "../config/nodemailer.js";
+// import transporter from "../config/nodemailer.js";
 
-export const nodemailerSend = async (req, res) => {
-    let resultado;
-console.log("entra")
-    try {
-        resultado = await transporter.sendMail({
-            from: "TEST MAIL medinaharold196@gmail.com",
-            to: "harmed2002@gmail.com",
-            subject: "Correo de Prueba",
-            html:
-            `
-                <div>
-                    <h1>Buenas tardes</h1>
-                </div>
-            `
-        });
+// export const nodemailerSend = async (req, res) => {
+//     let resultado;
 
-        if (resultado) {
-            console.log(resultado);
-            res.status(200).send({ succes: "Mail enviado exitosamente" });
-        }
+//     try {
+//         resultado = await transporter.sendMail({
+//             from: "TEST MAIL medinaharold196@gmail.com",
+//             to: "harmed2002@gmail.com",
+//             subject: "Correo de Prueba",
+//             html:
+//             `
+//                 <div>
+//                     <h1>Buenas tardes</h1>
+//                 </div>
+//             `
+//         });
 
-    } catch (error) {
-        console.log(error);
-        res.status(500).send({ error: "Error al enviar mail" });
-    }
-}
+//         if (resultado) {
+//             console.log(resultado);
+//             res.status(200).send({ succes: "Mail enviado exitosamente" });
+//         }
+
+//     } catch (error) {
+//         console.log(error);
+//         res.status(500).send({ error: "Error al enviar mail" });
+//     }
+// }
 

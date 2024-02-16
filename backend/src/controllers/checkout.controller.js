@@ -16,8 +16,7 @@ export const createTicket = async (req, res) => {
 
 		if (cart) {
 			// Actualizo la colección Cart con el detalle de los productos
-			const result = await cartModel.findByIdAndUpdate(cid, { products: req.body });
-			console.log("RESULT", result)
+			const updDetailCart = await cartModel.findByIdAndUpdate(cid, { products: req.body });
 
 			// Recorro el detalle de productos
 			req.body.forEach(async item => {
@@ -34,16 +33,15 @@ export const createTicket = async (req, res) => {
 
 			// Finalmente, creo el ticket
 			const ticket = await ticketModel.create({ amount, purchaser });
-			console.log("ticket", ticket);
 
 			if (ticket) {
-				/* */
-				//Envío el correo al usuario
-				await mailer.sendPurchaseConfirmation(purchaser, ticket._id);
-				if (updatedCart) {
-					return res.status(200).send({ message: "exito" });
+				// Envío el correo de notificación al usuario
+				await mailer.sendPurchaseConfirmation(purchaser, ticket);
+
+				if (updDetailCart) {
+					return res.status(200).send({ message: "Se generó la compra exitosamente" });
 				}
-				/* */
+
 				res.status(200).send({ ticket });
 
 			} else {

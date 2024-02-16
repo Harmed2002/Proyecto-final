@@ -1,5 +1,7 @@
 import 'dotenv/config';
 import nodemailer from 'nodemailer';
+import { userModel } from "../models/users.models.js"
+
 
 // Configuro la cuenta que envía el correo de prueba
 const transporter = nodemailer.createTransport({
@@ -33,25 +35,19 @@ const sendMailForDeletedAccount = async (email) => {
 	}
 };
 
-// Función para notificar la la compra
-const sendPurchaseConfirmation = async (email, ticketId) => {
+// Función para envío de mail para notificación de compra
+const sendPurchaseConfirmation = async (email, ticket) => {
 	try {
-		// Obtener información del ticket
-		const ticket = await ticketModel.findById(ticketId);
-		if (!ticket) {
-			console.log('Ticket no encontrado');
-			return;
-		}
-
-		// Obtener información del usuario
+		// Se obtiene la información del usuario
 		const user = await userModel.findOne({ email: email });
+
 		if (!user) {
 			console.log('Usuario no encontrado');
 			return;
 		}
 
 		const mailOptions = {
-			from: 'luciano.caro.1995@gmail.com',
+			from: 'ECOMMERCE medinaharold196@gmail.com',
 			to: email,
 			subject: `Gracias por tu compra, ${user.first_name}`,
 			text: `Gracias por tu compra, ${user.first_name}. Aquí está la información de tu compra:\n
@@ -60,8 +56,9 @@ const sendPurchaseConfirmation = async (email, ticketId) => {
                     Fecha de compra: ${ticket.purchase_datetime}\n`
 		};
 
-		await transport.sendMail(mailOptions);
+		await transporter.sendMail(mailOptions);
 		console.log('Email de confirmación de compra enviado correctamente');
+
 	} catch (error) {
 		console.log('Error al obtener información del ticket o usuario:', error);
 	}
@@ -69,7 +66,8 @@ const sendPurchaseConfirmation = async (email, ticketId) => {
 
 
 export const mailer = {
-	sendMailForDeletedAccount
+	sendMailForDeletedAccount,
+	sendPurchaseConfirmation
 }
 
 

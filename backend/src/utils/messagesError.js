@@ -31,7 +31,7 @@ export const authorization = (rol) => {
             return res.status(401).send({ error: "Unathorized user: Don't exist active session" });
         }
 
-        if (req.user.user.rol != rol) {
+        if (!rol.includes(req.user.user.rol)) {
             return res.status(401).send({ error: 'Do not have permissions', user : req.user });
         }
 

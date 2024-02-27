@@ -6,6 +6,7 @@ import sessionRouter from './session.routes.js';
 import checkoutRouter from "./checkout.routes.js";
 // import nodemailerRouter from "./nodemailer.routes.js";
 import errorRouter from "./error.routes.js";
+import mockingRouter from './mocking.routes.js';
 
 
 const router = Router();
@@ -17,7 +18,7 @@ router.use('/api/sessions', sessionRouter);
 router.use('/api/checkout', checkoutRouter);
 // router.use('/api/mail', nodemailerRouter);
 router.use('/api/errors', errorRouter);
-
+router.use('/api/mockingproducts', mockingRouter);
 
 
 

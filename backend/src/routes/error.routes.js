@@ -14,5 +14,3 @@ errorRouter.get('/fatal', fatal);
 
 
 export default errorRouter;
-
-

@@ -39,9 +39,7 @@ const Login = () => {
 				body: JSON.stringify(data)
 			});
 
-			setIsLoading(true);
-
-			console.log("RESP", response.status)
+			// console.log("RESP", response.status)
 	
 			if (response.status == 200) {
 				const datos = await response.json();

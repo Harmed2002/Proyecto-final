@@ -186,9 +186,11 @@ const ManagementProductPage = () => {
 
 			try {
 				// Obtengo todos los productos
-				const response = await fetch('http://localhost:4000/api/products', {
+				const response = await fetch('http://localhost:4000/api/products/products-management', {
 					method: 'GET',
+					credentials: 'include',
 					headers: {
+						'Authorization': `${token}`,
 						'Content-Type': 'application/json'
 					},
 				})

@@ -79,6 +79,8 @@ const ShopPage = () => {
 	const savePurchase = async () => {
 		const cartId = userData.cart;
 
+		setIsLoading(true);
+
 		// Grabo la compra
 		try {
             const response = await fetch(`http://localhost:4000/api/checkout/${cartId}`, {
@@ -107,6 +109,8 @@ const ShopPage = () => {
         } catch (error) {
             console.log('error', error);
         }
+
+		setIsLoading(false);
 
 		// Limpio los valores
 		// clearCart(); // Se limpia el carrito

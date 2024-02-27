@@ -8,7 +8,7 @@ const productRouter = Router();
 
 
 productRouter.get('/', productController.getProducts)
-productRouter.get('/products-management', productController.getProducts)
+productRouter.get('/products-management', passportError('jwt'), authorization('Admin'), productController.getProducts)
 productRouter.get('/:id', productController.getProductById);
 productRouter.get('/category/:idCat', productController.getProductsByCategory);
 productRouter.post('/', passportError('jwt'), authorization('Admin'), productController.postProduct);
